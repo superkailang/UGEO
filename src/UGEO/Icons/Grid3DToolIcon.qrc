@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/Icons">
+        <file>backcolor.png</file>
+        <file>cellface.png</file>
+        <file>cellrange.png</file>
+        <file>property.png</file>
+        <file>zadd.png</file>
+        <file>zminute.png</file>
+        <file>lineframe.png</file>
+        <file>My.ico</file>
+        <file>My.png</file>
+        <file>frmminbtstyle-hover.png</file>
+        <file>frmminbtstyle.png</file>
+        <file>frmmidbtstyle-hover.png</file>
+        <file>frmmidbtstyle.png</file>
+        <file>frmmaxbtstyle-hover.png</file>
+        <file>frmmaxbtstyle.png</file>
+        <file>frmclosebtstyle-hover.png</file>
+        <file>frmclosebtstyle.png</file>
+        <file>backview.png</file>
+        <file>bottomview.png</file>
+        <file>frontview.png</file>
+        <file>rightview.png</file>
+        <file>manager.png</file>
+    </qresource>
+</RCC>
