@@ -5,7 +5,8 @@
 A QT-C++ Software with embedded VTK support
 
 ===
-![Version](https://img.shields.io/badge/version-0.5.5-blue.svg)
+
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![VTK](https://img.shields.io/badge/VTK-8.2.0-red.svg)
 ![Qt](https://img.shields.io/badge/Qt-5.12.1-green.svg)
 
