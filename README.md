@@ -1,6 +1,6 @@
 # UGEO
 
-# High efficient Grid manamerment System
+## High efficient Grid manamerment System
 
 A QT-C++ Software with embedded VTK support
 
@@ -38,9 +38,10 @@ A QT-C++ Software with embedded VTK support
    ##### Install VS2013 + 
    ##### Install Qt 5.X 
          add Qt install dir into local machine path; 
-   ##### complire VTK in local machine
-         add 
+   ##### compile VTK in local machine
+         add VTK path to local machine
    ##### CMAKE 
+         using the CMake gui exe
          CMake UGEO\src\CMakeLists.txt
    
 # Contributing
