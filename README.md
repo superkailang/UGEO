@@ -11,7 +11,11 @@ A QT-C++ Software with embedded VTK support
 # Installation
 
 ```
-   CMake UGEO\src\CMakeLists.txt
+   For User
+   Install Setup.exe
+   
+   For Developer
+      Use the Compile methods;
 ```
 
 # Usage
@@ -26,8 +30,10 @@ A QT-C++ Software with embedded VTK support
   Import Data from  DataSet/case
   ```
 
-# Complire 
-
+# Compile 
+    
+    Need to Install Visual Studio, QT in Local Machine
+    
    ### Conditions
    ##### Install VS2013 + 
    ##### Install Qt 5.X 
@@ -35,6 +41,7 @@ A QT-C++ Software with embedded VTK support
    ##### complire VTK in local machine
          add 
    ##### CMAKE 
+         CMake UGEO\src\CMakeLists.txt
    
 # Contributing
 Any contribution is helpful and awesome! There are basically three forms of how you can contribute to this project and get involved with development:
