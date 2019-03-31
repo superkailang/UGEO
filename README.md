@@ -5,10 +5,7 @@
 # Installation
 
 ```
-
-
-
-    CMake UGEO\src\CMakeLists.txt
+   CMake UGEO\src\CMakeLists.txt
 ```
 
 # Usage
