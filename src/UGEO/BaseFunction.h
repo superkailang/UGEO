@@ -1,12 +1,53 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     BaseFunction.h													 *
+*  @brief    Base function for computer Geometry                             *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  Base function for computer Geometry                     *
+*----------------------------------------------------------------------------*
+*  Change History :                                                          *
+*  <Date>     | <Version> | <Author>       | <Description>                   *
+*----------------------------------------------------------------------------*
+*  2018/01/24 | 1.0.0.1   | kailanghuang      | Create file                  *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #ifndef BASEFUNCTION_h__
 #define BASEFUNCTION_h__
 #include"Gridstruct.h"
 #include"Constants.h"
 #include"Qstring.h"
 using namespace std;
-#define GPGzero(x) (((x)>0?(x):-(x))<InfSmall)
-namespace UMSM {
 
+
+// GPGZero judge if x==0 
+#define GPGzero(x) (((x)>0?(x):-(x))<InfSmall)
+
+/**
+* @UMSM Namespace
+*/
+namespace UMSM {
 	const char * QString2Char(QString std);
 	void GetCornerBounds(point t1, point t2, double *Bounds);
 

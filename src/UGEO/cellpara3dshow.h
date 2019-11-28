@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     cellpara3dshow.h												 *
+*  @brief    core class for 3d Grid Plot									 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  core class for 3d Grid Plot							 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #ifndef CELLPARA3DSHOW_H
 #define CELLPARA3DSHOW_H
 
@@ -50,8 +80,8 @@ public:
 	~cellpara3dshow();
 	Ui::cellpara3dshow ui;	
 public:
-	MyWidget* parentpointer;					//框架类指针
-private:   //菜单栏Action
+	MyWidget* parentpointer;					//Framework class pointer
+private:   // Menu Action
 	QAction *OpenFile;	
 	QAction *NewFile;
 	QAction *SaveFile;
@@ -65,10 +95,10 @@ private:
 	void InitLutLookup();
 	void SetDockWidgetTree();
 	void SetStatusLabel();
-	void creatMenuBar(); //建立菜单栏	
-	void CreatTopToolBar(); //创立顶部的工具栏
-	void CreatRightToolBar(); //创立右部的工具栏	
-	void AddToolBarConnection(); //添加工具栏响应事件
+	void creatMenuBar(); //create menu toolbar	
+	void CreatTopToolBar(); //create Top toolbar
+	void CreatRightToolBar(); // create right toolbar	
+	void AddToolBarConnection(); // Add toolbar response events
 	// 
 	void SetFont();
 	void InilizationQVtkWidget(QVTKWidget *qvtkWidget, vtkSmartPointer<vtkRenderer> ren);
@@ -85,19 +115,19 @@ private:
 	vtkSmartPointer<vtkCubeAxesActor> AxesActor;
 	int CurrentTabIndex;
 	QFont SystemFont;
-	//状态值
-	QColor currentbackcolor;			//背景色	
-	int visofaxes = 0;					//是否显示坐标轴
-	int iscreateaxes = 0;				//是否创建坐标轴	
-	bool isaddUncongText = false;		//是否建立Unocng文本
-	bool isaddscalarbartick = false;	//是否建立Unocng文本
-	bool bkcolofbk = false;				//背景色是否黑色
-	bool hasvalue = false;				//cellvalue是否赋值
-	int istransparent = 0;				//半透明设置 0--不透明;1--20%;2--10%
-	int colserindex = 0;				//色卡色系
-	QString currentkeyName;				//当前参数关键字名称
-	QColor celllinecolor;				//网格线颜色	
-	int linewidth = 1;					//线宽
+	//Status Value
+	QColor currentbackcolor;			//Background Color	
+	int visofaxes = 0;					//Whether to display axes
+	int iscreateaxes = 0;				//Whether to create axes
+	bool isaddUncongText = false;		//if to crate Unocng text
+	bool isaddscalarbartick = false;	
+	bool bkcolofbk = false;				//if Background color is Black
+	bool hasvalue = false;				//cellvalue is set 
+	int istransparent = 0;				//transparent value 0--opacity ;1--20%;2--10%
+	int colserindex = 0;				//color index
+	QString currentkeyName;				//current key name
+	QColor celllinecolor;				//color of grid line
+	int linewidth = 1;					//line width
 
 private:
 	QStringList list;
@@ -115,7 +145,7 @@ private:
 	QAction *NewWindow;
 	QAction *undoAction;
 	QAction *redoAction;
-private:   //顶部工具栏Action
+private:   //top toolbars Actions
 	QAction *colfaceaction;
 	QAction *lineframeaction;
 	QAction *backcoloraction;
@@ -130,7 +160,7 @@ private:   //顶部工具栏Action
 	QAction *Backviewaction;
 	QAction *Manager_action;
 
-private:   //右部工具栏Action
+private:   //right toolbars Actions
 	QAction *cellrangeaction;
 	QAction *propertyaction;
 private slots:
@@ -146,17 +176,17 @@ private slots:
 	void WinTabChange(int Index);
 	void AddTabWidget();
 
-	// 视图;
+	// View;
 	void setFrontView();
 	void setBackView() ;
 	void SetTopView()  ;
 	void SetBottomView();
 	void SetLeftView();
 	void SetRightView();
-	void set_switch(); // 切换
+	void set_switch(); // swict view
 	
 	void Windowtabclose(int index);
-	void closeMywidget();    //打开case目录
+	void closeMywidget();    //open case dir
 	void cellrangeset();
 	void Propertyset();
 	// ToolBar
@@ -175,7 +205,7 @@ public:
 	void GetCellId(int FaceId);
 private:
 	bool *isPropFlag;
-	bool isSwitch = true; // 自由切换 ; False 不能切换;
+	bool isSwitch = true; //  False: unable to switch;
 	double Lxyz;
 	double gridCenter[3];
 	vector<vector<bool>> UPropFilter; // Layer Prop AND Space

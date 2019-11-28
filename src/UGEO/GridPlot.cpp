@@ -1,9 +1,38 @@
-#include"Gridplot.h"
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     Girdplot.cpp													 *
+*  @brief    3D Grid Plot Function 											 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  3d Gird plot Function									 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
 
+#include"Gridplot.h"
 namespace UMSM {
 
 
-	//获取边界面上的Boundary 点和属性
+	// Obtain Boundary points and properties
 	void GetBouondary(TreeNode *Note, vector<FaceNode> &FaceNodes){
 		NeightBor tempNeighbor;
 		FaceNode face;
@@ -123,16 +152,16 @@ namespace UMSM {
 
 	void DrawSingleCellLine(vector<FaceNode> FaceNodes, vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkActor> LineActor)
 	{
-		// 画线;	
+		// Draw Line;	
 		int CellNum = (int)FaceNodes.size();
 		int Length = 4;
 		vtkIdType templine[2];
-		// 定义line  points cells 
+		// Definition line  points cells 
 		vtkSmartPointer<vtkCellArray> linepolys = vtkSmartPointer<vtkCellArray>::New();
 		vtkSmartPointer<vtkPolyData> linepolydata = vtkSmartPointer<vtkPolyData>::New();
 		vtkSmartPointer<vtkPolyDataMapper> linemapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 		/////////////// 			
-		// 线段的索引;
+		// index of Lines;
 		int m = 0;
 		for (int i = 0; i < CellNum; i++)
 		{
@@ -145,27 +174,27 @@ namespace UMSM {
 			}
 			m = m + 4;
 		};
-		//  设置 LINE
-		linepolydata->SetPoints(points); //几何结构
-		linepolydata->SetLines(linepolys); //拓扑结构
-		linemapper->SetInputData(linepolydata); //导入数据
+		//  Set LINE
+		linepolydata->SetPoints(points); // Input points
+		linepolydata->SetLines(linepolys); // Input Lines
+		linemapper->SetInputData(linepolydata); //input linepolydata
 		LineActor->SetMapper(linemapper);
 		LineActor->GetProperty()->SetColor(0.0, 0.0, 0.0);
 		LineActor->GetProperty()->SetLineWidth(2);
 		LineActor->SetPickable(false);
-		//////////////////// 删除数据;
+		//////////////////// Delete Data;
 	}
 	void DrawSingleCellLine(int NumberGrid, vtkSmartPointer<vtkActor> celllineactor, vtkSmartPointer<vtkPoints> points)
 	{
-		// Cell 线;
+		// Cell Lines;
 		vtkIdType templine2[2];
-		// 定义line  points cells		
+		// Definition line  points cells		
 		vtkSmartPointer<vtkCellArray> linepolys = vtkSmartPointer<vtkCellArray>::New();
 		vtkSmartPointer<vtkPolyData> linepolydata = vtkSmartPointer<vtkPolyData>::New();
 		vtkSmartPointer<vtkPolyDataMapper> linemapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 		///////////////
 		int index = 0;
-		// 添加索引
+		// Add Index
 		for (int i = 0; i < NumberGrid; i++)
 		{
 			index = i * 8;
@@ -181,15 +210,15 @@ namespace UMSM {
 				linepolys->InsertNextCell(2, templine2);
 			}
 		}
-		//  设置 LINE
-		linepolydata->SetPoints(points); //几何结构
-		linepolydata->SetLines(linepolys); //拓扑结构
-		linemapper->SetInputData(linepolydata); //导入数据
+		//  Set LINE
+		linepolydata->SetPoints(points); //Input Points
+		linepolydata->SetLines(linepolys); //Input Lines
+		linemapper->SetInputData(linepolydata); //Input linepolydata
 		celllineactor->SetMapper(linemapper);
 		celllineactor->GetProperty()->SetColor(0.0, 0.0, 0.0);
 		celllineactor->GetProperty()->SetLineWidth(1);
 		celllineactor->SetPickable(false);
-		//////////////////// 删除数据;
+		//////////////////// Delete Data;
 	}
 
 	double *GetFaceValue(vector<FaceNode> FaceNodes, int Type){
@@ -220,7 +249,7 @@ namespace UMSM {
 					Value[idx++] = FaceNodes[i].SOIL;
 					break;
 				case 6:
-					Value[idx++] = FaceNodes[i].FACIES; // 颜色颠倒
+					Value[idx++] = FaceNodes[i].FACIES; // reverse Color
 					break;
 				case 7:
 					Value[idx++] = FaceNodes[i].BULKVOLUME;
@@ -254,23 +283,23 @@ namespace UMSM {
 	}
 
 
-	// 画面; Model3DViewData没用
-	void DrawGPGGrid(vector<FaceNode> FaceNodes, double *CellValue, double zmin, double zmax, vtkSmartPointer<vtkActor> SingleGridActor, vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkDoubleArray> val, vtkSmartPointer<vtkLookupTable> hueLut) //,vtkSmartPointer<vtkColorTransferFunction> lut) // draw GPG网格
+	// Draw Grid
+	void DrawGPGGrid(vector<FaceNode> FaceNodes, double *CellValue, double zmin, double zmax, vtkSmartPointer<vtkActor> SingleGridActor, vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkDoubleArray> val, vtkSmartPointer<vtkLookupTable> hueLut) //,vtkSmartPointer<vtkColorTransferFunction> lut) // draw GPGGrid
 	{
 		int NumberGrid = (int)FaceNodes.size();
 		if (NumberGrid > 0){
-			//定义polygon  points cells
+			//Definition polygon  points cells
 			vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 			vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
 			vtkSmartPointer<vtkPolyDataMapper> ploygonMapper = vtkSmartPointer<vtkPolyDataMapper>::New(); 
-			//////////////// 插入点;			
+			//////////////// Insert Points ;			
 			for (int i = 0; i < NumberGrid; i++)
 			{
 				int index = i * 4;
 				cells->InsertNextCell(4);
 				for (int j = 0; j < 4; j++)
 				{
-					cells->InsertCellPoint(index + j); // 上下顶面					
+					cells->InsertCellPoint(index + j); // Top and bottom					
 					val->InsertNextValue(CellValue[index + j]);
 				}
 			}
@@ -297,14 +326,14 @@ namespace UMSM {
 			SingleGridActor->GetProperty()->SetSpecular(0.0);
 		}
 	}
-	void DrawGPGGrid(int NumberGrid, double *CellValue, double zmin, double zmax, vtkSmartPointer<vtkActor> SingleGridActor, vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkDoubleArray> val, vtkSmartPointer<vtkLookupTable> hueLut)//, vtkSmartPointer<vtkColorTransferFunction> lut) // draw GPG网格
+	void DrawGPGGrid(int NumberGrid, double *CellValue, double zmin, double zmax, vtkSmartPointer<vtkActor> SingleGridActor, vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkDoubleArray> val, vtkSmartPointer<vtkLookupTable> hueLut)//, vtkSmartPointer<vtkColorTransferFunction> lut) // draw GPG Grid
 	{
 		if (NumberGrid > 0){
-			//定义polygon  points cells
+			//define polygon  points cells
 			vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 			vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
 			vtkSmartPointer<vtkPolyDataMapper> ploygonMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-			//////////////// 插入点;			
+			//////////////// Inert Points;			
 			int tempIdx, idx = 0;
 			int Side[4] = { 0, 1, 1, 0 };
 			for (int i = 0; i < NumberGrid; i++)
@@ -318,7 +347,7 @@ namespace UMSM {
 					for (int j = 0; j < 4; j++)
 					{
 						tempIdx = index + j + 4 * m;
-						cells->InsertCellPoint(tempIdx); // 上下顶面						
+						cells->InsertCellPoint(tempIdx); // Top and bottom						
 					}
 				}
 				for (int j = 0; j < 4; j++)
@@ -339,7 +368,7 @@ namespace UMSM {
 			// ploygon  Actor
 			//lut->SetColorSpaceToHSV();
 			//ploygonMapper->SetLookupTable(lut);
-			//// model3data 暂时没用
+			//// model3data 
 			//for (int i = 0; i < model3data.col.length(); i++)
 			//{
 			//	QColor color = model3data.col[i];
@@ -561,7 +590,7 @@ namespace UMSM {
 						//TreeNode *tempnode =NULL;
 						//tempnode = Nodes->childNotes[i]->childNotes[j];
 						if ( Nodes->childNotes[i]->childNotes[j]->NodeData.isActive){
-							// 计数有效显示网格;
+							// Count Active Grid Number ;
 							valid_cellnum = valid_cellnum + 1;
 							SetGridData(SGrid, Nodes->childNotes[i]->childNotes[j]->NodeData.IIndex, Nodes->childNotes[i]->childNotes[j]->NodeData.JIndex, Nodes->childNotes[i]->childNotes[j]->NodeData.KIndex, 
 								Nodes->childNotes[i]->childNotes[j]->NodeData.dx, Nodes->childNotes[i]->childNotes[j]->NodeData.dy, Nodes->childNotes[i]->childNotes[j]->NodeData.dz, SGrid.NX, SGrid.NY, SGrid.NZ);
@@ -650,7 +679,7 @@ namespace UMSM {
 	}
 
 
-	// 空间查询;
+	// Space Filter;
 	void updateSpace(int depth, int Layer, TreeNode *Nodes, StrucGrid &SGrid, double xmin, double xmax, double ymin, double ymax, int kmin, int kmax, vector<bool> SpaceFlag){
 		int *LayerTop = new int[3];
 		int *LayerBottom = new int[3];
@@ -686,16 +715,15 @@ namespace UMSM {
 		UpdateSpaceNodes(depth, Layer, TotalLayer, Nodes, SGrid, xmin, xmax, ymin, ymax, LayerTop, LayerBottom, SpaceFlag);
 		printf("4-2\n");
 	}
-	// 迭代查询空间信息
+	// Iter Space Query
 	void UpdateSpaceNodes(int depth, int Layer, int TotalLayer, TreeNode *Nodes, StrucGrid &SGrid, double xmin, double xmax, double ymin, double ymax, int *kmin, int *kmax, vector<bool> SpaceFlag){
 		/*
-			LOD 1 空间查询; LOD1 更新; 终止;
-			LOD 2 空间查询; LOD1 更新;-> LOD2 更新;更新截止;
-			LOD 3 空间查询; LOD1 更新;-> LOD2 更新-> L0D3 ; 更新截止;
+			LOD 1 Space Filter; update LOD1;
+			LOD 2 Space Filter; update LOD1 -> LOD2;
+			LOD 3 Space Filter; update LOD1 -> LOD2 -> L0D3
 			*/
 		vector<bool>  tempFlag;
 		if (depth < Layer){
-			// 如果层位更新 获取对应的kmin,kmax;
 			for (int i = 0; i < Nodes->NumberChild; i++){  // Root
 				Nodes->childNotes[i]->NodeData.isActive = true;
 				if (SpaceFlag[2]){
@@ -727,7 +755,6 @@ namespace UMSM {
 		else{
 			if (depth < TotalLayer){
 				tempFlag = SpaceFlag;
-				// 如果层位更新 获取对应的kmin,kmax;
 				for (int i = 0; i < Nodes->NumberChild; i++){
 					if (SpaceFlag[2]){
 						tempFlag[2] = false; // false; 
@@ -757,7 +784,7 @@ namespace UMSM {
 	}
 
 	void UpdateGridNode(TreeNode *Nodes, bool isValue){
-		// 如果层位更新 获取对应的kmin,kmax;
+		// if update Layers  get kmin,kmax of Layer;
 		for (int i = 0; i < Nodes->NumberChild; i++){
 			Nodes->childNotes[i]->NodeData.isActive = isValue;
 			for (int j = 0; j < Nodes->childNotes[i]->NumberChild; j++){
@@ -774,16 +801,15 @@ namespace UMSM {
 			id_k.k = Nodes->childNotes[i]->NodeData.KIndex;
 			if (SetTreeNode(depth, Layer, TotalLayer, xmin, xmax, ymin, ymax, kmin, kmax, id_k, Nodes->childNotes[i], SpaceFlag)){
 				if (depth < Layer){
-					// 迭代;
+					// Iteration;
 					if (depth < TotalLayer){
 						//for (int j = 0; j < Nodes->childNotes[i]->NumberChild; j++){
 							UpdateSpaceNodes(depth + 1, Layer, TotalLayer, Nodes->childNotes[i], SGrid, xmin, xmax, ymin, ymax, Layerkmin, Layerkmax, SpaceFlag);
 						//}
 						// SpaceFilter(depth + 1, Layer, TotalLayer, Nodes->childNotes[i], SGrid, xmin, xmax, ymin, ymax, kmin, kmax, SpaceFlag);
-						// X.Y 范围之内的 未筛选;  [5,10]范围[1，6]未筛选掉;
 					}
 					else{
-						// SGrid 最底层时; 跳转至筛选;
+						// SGrid Bottom Layer;
 						SetNodeGridSpace(Nodes->childNotes[i], SGrid, SGrid.NX, SGrid.NY, SGrid.NZ, xmin, xmax, ymin, ymax, kmin, kmax, SpaceFlag);
 					}
 				}
@@ -794,7 +820,6 @@ namespace UMSM {
 				//}
 			}
 			else{
-				// 全部满足或者不满足;
 				if (Layer == TotalLayer){
 					TreeNode * tempNode = Nodes->childNotes[i];
 					if (tempNode->NodeData.isActive){
@@ -823,7 +848,7 @@ namespace UMSM {
 			}
 			else{
 				if (id_k.k >= kmin && (id_k.k + Nodes->NodeData.dz - 1) <= kmax){
-					; //完全满足; 不返回; 继续判断 X,Y;
+					; // if statisfy condition
 				}
 				else{
 					isPartActive = true;
@@ -861,21 +886,21 @@ namespace UMSM {
 				}
 			}
 		}
-		// 空间查询全部满足
+		// All spatial queries are satisfied
 		if (isPartActive){
-			// 部分满足
+			// partial satisfied
 			Nodes->NodeData.isActive = true;
 			return true;
 		}
 		else{
-			;// 全部满足, 子节点需更新;
+			;// All satisfied, Set Node Active;
 			Nodes->NodeData.isActive = true;
 			return false;
 		}
 	}
 	
 	void UpdateSpaceNode(StrucGrid &SGrid, int depth, int Layer, int TotalLayer, TreeNode *Nodes, bool isValue){
-		// 子节点; 
+		// Children Nodes; 
 		if (depth <= Layer){
 			if (Layer <= TotalLayer){
 				for (int i = 0; i < Nodes->NumberChild; i++){
@@ -941,9 +966,9 @@ namespace UMSM {
 		return true;
 	}
 
-	// 迭代查询属性信息;
+	// iteration to query attribute;
 	void GeoPropUpdate(int Layer, TreeNode *Nodes, StrucGrid &SGrid, double valueMin, double valuemax, int type,bool isFixed){
-		// 精度问题潜在error;  
+		// add minivalue in case of float error;  
 		valueMin = (valueMin - miniValue);
 		valuemax = (valuemax + miniValue);
 		GeoFilter(0, Layer, Nodes, SGrid, valueMin, valuemax, type, isFixed);
@@ -958,7 +983,7 @@ namespace UMSM {
 				int idx_j = j*nx;
 				for (int i = 0; i < nx; i++){
 					int idx = idx_j + idx_k + i;
-					// isFixed 取并集; 
+					// isFixed Merge Two list; 
 					if (isFixed){
 						if (SGrid.ACTNUM[idx] && SGrid.CPGCells[idx].is_act){
 							SetGridProp(idx,SGrid,valueMin,valuemax,type);
@@ -1093,7 +1118,7 @@ namespace UMSM {
 		}
 	}
 
-	// Original Grid 提取表面
+	// Original Grid Extract Visible Faces
 	void GetGridBoundary(StrucGrid &SGrid, vector<FaceNode> &FaceNodes){
 		bool(*Cellarray)[6] = new bool[SGrid.NGrid][6];
 		memset(Cellarray, false, sizeof(bool)*SGrid.NGrid * 6);
@@ -1112,7 +1137,7 @@ namespace UMSM {
 				for (int k = 0; k < 2; k++){
 					int idx_k = k*(nz - 1)*nx*ny;
 					idx = idx_j + idx_k + i;
-					Cellarray[idx][k] = true; // True 表示显现;
+					Cellarray[idx][k] = true; // True indicate Visible;
 				}
 			}
 		}
@@ -1122,7 +1147,7 @@ namespace UMSM {
 				int idx_k = k*nx*ny;
 				for (int i = 0; i < 2; i++){
 					idx = idx_j + idx_k + i*(nx - 1);
-					Cellarray[idx][i + 2] = true; // True 表示显现;
+					Cellarray[idx][i + 2] = true; // Visible;
 				}
 			}
 		}
@@ -1132,7 +1157,7 @@ namespace UMSM {
 				for (int j = 0; j < 2; j++){
 					int idx_j = j*(ny - 1)*nx;
 					idx = idx_j + idx_k + i;
-					Cellarray[idx][j + 4] = true; // True 表示显现;
+					Cellarray[idx][j + 4] = true; // Visible;
 				}
 			}
 		}
@@ -1147,7 +1172,7 @@ namespace UMSM {
 							tempIdx = idx + Range[m];
 							if (tempIdx >= 0 && tempIdx < SGrid.NGrid){
 								if (SGrid.CPGCells[tempIdx].is_act){
-									Cellarray[tempIdx][m] = true; // True 表示显现;
+									Cellarray[tempIdx][m] = true; // Visible;
 								}
 							}
 						}
@@ -1175,7 +1200,7 @@ namespace UMSM {
 		//delete [] Cellarray;
 	}
 
-	// 迭代提取可视面;
+	// Extract Visible Face;
 	void GetOrginalFace(int depth, int Layer, TreeNode *Note, StrucGrid &SGrid, vector<FaceNode> &FaceNodes){
 		if (depth == Layer){
 			for (int i = 0; i < Note->NumberChild; i++){
@@ -1185,7 +1210,7 @@ namespace UMSM {
 			}
 		}
 		else{
-			// 迭代;
+			// Loop;
 			for (int i = 0; i < Note->NumberChild; i++){
 				if (Note->childNotes[i]->NodeData.isActive){
 					GetOrginalFace(depth + 1, Layer, Note->childNotes[i], SGrid, FaceNodes);
@@ -1425,10 +1450,10 @@ namespace UMSM {
 			}
 		}
 		else{
-			// 取消迭代
+			// Range From Children of Node
 			for (int i = 0; i < Note->NumberChild; i++){ // root
 				if (Note->childNotes[i]->NodeData.isActive){  
-					for (int j = 0; j < Note->childNotes[i]->NumberChild; j++){  // LOD1 层位
+					for (int j = 0; j < Note->childNotes[i]->NumberChild; j++){  // LOD1 Layer
 						GetTreeNodeBoundary( depth + 1, Layer,Note->childNotes[i]->childNotes[j], SGrid, FaceNodes); // LOD2 Face
 					}
 				}
@@ -1577,15 +1602,15 @@ namespace UMSM {
 	*/
 	void GetNodeBoundary(TreeNode *Note, StrucGrid &SGrid, vector<FaceNode> &ZoneDatas){
 		/*
-			根据上一层 LOD 0 的CellArray 获取下一层 LOD1 的节点;
+			Gets the nodes of LOD1 in the next layer based on the CellArray of LOD 0 in the previous layer
 		*/
 		for (int i = 0; i < Note->NumberChild; i++){   //root 
 			if (Note->childNotes[i]->NodeData.isActive){
-				for (int j = 0; j < Note->childNotes[i]->NumberChild; j++){  // LOD1 层位; 
+				for (int j = 0; j < Note->childNotes[i]->NumberChild; j++){  // LOD1 Layer; 
 					TreeNode * tempNote = Note->childNotes[i]->childNotes[j];
 					if (tempNote->NodeData.isActive){
 						for (int mm = 0; mm < tempNote->NumberChild; mm++){
-							GetBoundary(tempNote->NodeData, tempNote->childNotes[mm], SGrid, ZoneDatas,tempNote->Cellarray); // 优化 LOD 2; 
+							GetBoundary(tempNote->NodeData, tempNote->childNotes[mm], SGrid, ZoneDatas,tempNote->Cellarray); // Optimize LOD 2; 
 						}
 					}
 				}
@@ -1595,7 +1620,7 @@ namespace UMSM {
 
 	void GetBoundary(CPGNode LayerNode, TreeNode *Note, StrucGrid &SGrid, vector<FaceNode> &FaceNodes, bool *Cellarray){ // Cellarray;
 		/*
-			CellArray 表示Note层位六个方向显示的层位;
+			CellArray Represents the six directions of the Note layer
 		*/
 		int Nc = Note->NumberChild;
 		int LeftBoundary[4] = { 0, 4, 7, 3 }, RightBoundary[4] = { 1, 2, 6, 5 };
@@ -1879,7 +1904,7 @@ namespace UMSM {
 	void GetNodeCellRange(int depth, int Layer, TreeNode *Note, vector<CellRange> &cellRange,bool *isPropFlag){
 		if (depth == Layer){
 			for (int i = 0; i < Note->NumberChild; i++){  
-				GetCellRange(Note->childNotes[i], cellRange, isPropFlag);// 层位；
+				GetCellRange(Note->childNotes[i], cellRange, isPropFlag);// Layers；
 			}
 		}
 		else{
@@ -2005,7 +2030,6 @@ namespace UMSM {
 		}
 	};
 
-	// 获取
 	void getLayer2(intArray TopLayers, intArray BottomLayers, int TopIndex, int BottomIndex, int &iIndex, int &j){
 		bool first = false;
 		iIndex = -1;
@@ -2024,11 +2048,3 @@ namespace UMSM {
 		}
 	}
 };
-
-
-/*
-2019-1-19
-1) 裂缝处理
-2) 沉积相合并;
-3) 其他问题;
-*/

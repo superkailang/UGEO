@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     fileReader.cpp													 *
+*  @brief    file IO 														 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  read Eclipse or Petrel Grid File						 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include"fileReader.h"
 #include"qfiledialog.h"
 #include <iostream>
@@ -9,21 +39,21 @@ using namespace std;
 bool FileReader::Data_File_Dialog(int &FileIndex, QString &fileName)
 {
 	QStringList fileNameList;
-	QFileDialog* fd = new QFileDialog();//创建对话框	
+	QFileDialog* fd = new QFileDialog();  // Creating Dialogs	
 	fd->setNameFilter(filters);
 	fd->setFileMode(QFileDialog::ExistingFiles);
-	fd->setViewMode(QFileDialog::List);  //设置浏览模式，有 列表（list） 模式和 详细信息（detail）两种方式	
-	if (fd->exec() == QDialog::Accepted)   //如果读取成功的执行
+	fd->setViewMode(QFileDialog::List);  // Set View mode, list mode or detail mode
+	if (fd->exec() == QDialog::Accepted)   // if read on success
 	{
-		QString sldfieter = fd->selectedNameFilter();  //判断返回的数据的格式;
+		QString sldfieter = fd->selectedNameFilter();  //Determine the format of the returned data;
 		fileNameList = fd->selectedFiles();
 		fileName = fileNameList[0];
 		for (int i = 0; i < ListFilters.size(); i++)
 		{
-			if (sldfieter == ListFilters.at(i)) //满足数据格式
+			if (sldfieter == ListFilters.at(i)) //Satisfy the data format
 			{
 				FileIndex = i;
-				return  true;  //返回文件位置;
+				return  true; // return file Index;
 			}
 		}
 	}
@@ -35,8 +65,8 @@ FileReader::FileReader(const bool _if_echo){
 	echoline_len = 0;
 	echo_count = 0;
 	//ListFilters.append("image(*.jpg *.png *.bmp *.gif *.ico *.eps)");
-	ListFilters.append("Input Data(*.dat *.txt *.GRDECL)");
-	filters = "Input Data(*.dat *.txt *.GRDECL)";
+	ListFilters.append("Input Data(*.dat *.txt *.GRDECL)"); // file format fileter
+	filters = "Input Data(*.dat *.txt *.GRDECL)";  // support .dat, .txt, *.GRDECL Files
 
 };
 FileReader::FileReader(FileReader& src){
@@ -66,7 +96,7 @@ bool FileReader::InputData(const char* filename, Wells &wells, StrucGrid& GridDa
 		skip_sharp();
 		echoline_len = 0;
 		readString(kword);
-		if (UGStrCmp(kword, "INCLUDE")) {
+		if (UGStrCmp(kword, "INCLUDE")) {   // Keyword include INCLUDE
 			char fname[MAX_STRING_LEN];
 			char filename[MAX_STRING_LEN];
 			skip_sharp();
@@ -83,7 +113,7 @@ bool FileReader::InputData(const char* filename, Wells &wells, StrucGrid& GridDa
 			readValue(&x);	GridData.YCoord0 = x;
 			//readValue(&x);	GridData.Corner_Z = x;
 		}
-		else if (UGStrCmp(kword, "WellDATA"))
+		else if (UGStrCmp(kword, "WellDATA"))   // Keyword include WellDATA
 		{
 			if (!ReadWellData(wells))
 				return false;
@@ -198,7 +228,7 @@ bool FileReader::ReadWellData(Wells &wells)
 	strcpy_s(WellFile, file_dir);
 	strcat_s(WellFile, WellName);
 	strcat_s(WellFile, "\\*.well");
-	////获取该路径下的所有文件
+	// Gets all the files under this file path
 	vector<string> wellnames;
 	vector<string> files = getFiles(WellFile, wellnames);
 	WellNum = (int)files.size();
@@ -523,7 +553,7 @@ void TypeFileDir(char* FileDir){
 		dir_len -= 2;
 	}
 
-	if (_stricmp(tmp_dir + dir_beg + dir_len - 4, ".DAT") == 0) { // 去除".dat"后缀
+	if (_stricmp(tmp_dir + dir_beg + dir_len - 4, ".DAT") == 0) { // Remove the ".dat" suffix
 		tmp_dir[dir_beg + dir_len - 4] = '\0';
 		dir_len -= 4;
 	}
@@ -533,8 +563,8 @@ void TypeFileDir(char* FileDir){
 
 vector<string> getFiles(string cate_dir, vector<string> &filenames)
 {
-	vector<string> files;//存放文件名
-	string p;  //string类很有意思的一个赋值函数:assign()，有很多重载版本		
+	vector<string> files;  //vector container for filenames
+	string p; 	
 	p = cate_dir;
 	int file_dir_right = (int)p.length();
 	while (file_dir_right > 0 && p[file_dir_right - 1] != '\\') {
@@ -544,7 +574,7 @@ vector<string> getFiles(string cate_dir, vector<string> &filenames)
 	//p[file_dir_right - 1] = '\0';
 	__finddata64_t  file;
 	__int64 lf;
-	//输入文件夹路径  
+	// folder path
 	if ((lf = _findfirst64(cate_dir.c_str(), &file)) == -1) {
 		cout << cate_dir << " not found!!!" << endl;
 	}
@@ -597,7 +627,7 @@ vector<string> getFiles(string cate_dir, vector<string> &filenames)
 	closedir(dir);
 #endif
 
-	//排序，按从小到大排序  
+	//Sort files
 	sort(files.begin(), files.end());
 	return files;
 }

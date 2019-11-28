@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     mywidget.cpp													 *
+*  @brief    Class QWidget													 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  QWidget For UI Layout									 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include "mywidget.h"
 #include "cellpara3dshow.h"
 #include"EnumDef.h"
@@ -57,7 +87,7 @@ MyWidget::~MyWidget(){
 	delete closebT;
 	delete maxbT;
 }
-bool MyWidget::eventFilter(QObject *object, QEvent *event)//事件过滤器
+bool MyWidget::eventFilter(QObject *object, QEvent *event)  //event Filter
 {
 	if (object == this){
 		if (event->type() == QEvent::WindowDeactivate){
@@ -75,18 +105,18 @@ bool MyWidget::eventFilter(QObject *object, QEvent *event)//事件过滤器
 }
 void MyWidget::setSize(){
 
-	int hwidth = 4.0;     //左右边框宽度
-	int vtheight = 20.0;  //顶部标题高度
-	int vbheight = 4.0;   //底部边框高度
+	int hwidth = 4.0;     //left and right border margin
+	int vtheight = 20.0;  // top height of title
+	int vbheight = 4.0;   //bottom border margin
 
 	int BaseSizeX = 1280;
-	int BaseSizeY = 720;  //基础分辨率
+	int BaseSizeY = 720;  //Base resolution
 
 	QDesktopWidget* desktopWidget = QApplication::desktop();
-	QRect screenRect = desktopWidget->screenGeometry();   //当前屏幕分辨率
+	QRect screenRect = desktopWidget->screenGeometry();   //current screen resolution
 
 	double fx = (double)screenRect.width() / BaseSizeX;
-	double fy = (double)screenRect.height() / BaseSizeY;   //两者的比例
+	double fy = (double)screenRect.height() / BaseSizeY;   //ratio of screen resolution
 
 	if (widgetindex == 13){
 		fx = 1.0;
@@ -103,7 +133,7 @@ void MyWidget::setSize(){
 
 	curwidth = Basesize.width();
 	curheight = Basesize.height();
-	this->setGeometry(0, 0, curwidth, curheight);  //中心窗口大小;
+	this->setGeometry(0, 0, curwidth, curheight);  //Center Windows Size;
 
 
 	TopFrame->setGeometry(0, 0, Basesize.width(), vtheight);
@@ -113,8 +143,8 @@ void MyWidget::setSize(){
 	CentralFrame->setGeometry(hwidth, vtheight, Centresize.width(), Centresize.height());
 
 
-	int btwidth = 25.0;    //最小、关闭按钮宽度
-	int btheight = 15.0;    //最小、关闭按钮高度
+	int btwidth = 25.0;    // Minimum close button width
+	int btheight = 15.0;    // Minimum close button height
 
 	int bty = 3.0;
 	mincloseval = fx*mincloseval;
@@ -134,7 +164,7 @@ void MyWidget::setSize(){
 
 	int len = titlelB->width();
 
-	//设置样式
+	//Set style
 	TopFrame->setStyleSheet(
 		"background: #3399CC;"
 		"border-top: 1px solid  black;"
@@ -159,81 +189,81 @@ void MyWidget::setSize(){
 		);
 
 }
-void MyWidget::setCentralWidget(int WidgetIndex, bool istrag, bool domodel, bool islayout) //设置中心窗体
+void MyWidget::setCentralWidget(int WidgetIndex, bool istrag, bool domodel, bool islayout) //Set Central Windows
 {
 	switch (WidgetIndex)
 	{
-	case  1:   //Widget类
+	case  1:   //Widget class 
 		//CentralFrame = new Widget(this);
 		Centresize.setWidth(565);
 		Centresize.setHeight(570);
 		break;
-	case  2:   //carfinset类
+	case  2:   //carfinset class
 		CentralFrame = new QDockWidget(tr("PEBI Model"), this);
 		//Centresize.setWidth(410);
 		//Centresize.setHeight(500);
 		break;
-	case  3:   //cellline类
+	case  3:   //cellline class
 		/*CentralFrame = new cellline(this);
 		Centresize.setWidth(200);
 		Centresize.setHeight(40);*/
 		break;
-	case  4:   //cellpara3dshow类
+	case  4:   //cellpara3dshow class
 		CentralFrame = new cellpara3dshow(this);
 		Centresize.setWidth(960);
 		Centresize.setHeight(540);
 		break;
-	case  5:   //cellparastatisanaly类
+	case  5:   //cellparastatisanaly class
 		//CentralFrame = new cellparastatisanaly(this);
 		Centresize.setWidth(360);
 		Centresize.setHeight(220);
 		break;
-	case  6:   //cellrange类
+	case  6:   //cellrange class
 		//CentralFrame = new cellrange(this);
 		Centresize.setWidth(230);
 		Centresize.setHeight(180);
 		break;
-	case  7:   //colorbarset类
+	case  7:   //colorbarset class
 		//CentralFrame = new colorbarset(this);
 		Centresize.setWidth(150);
 		Centresize.setHeight(270);
 		break;
-	case  8:   //gridparaset类
+	case  8:   //gridparasetclass
 		//CentralFrame = new GridParaSet(this);
 		Centresize.setWidth(291);
 		Centresize.setHeight(240);
 		break;
-	case  9:   //mycalender类
+	case  9:   //mycalender class 
 		//CentralFrame = new QCalendarWidget(this);
 		Centresize.setWidth(200);
 		Centresize.setHeight(160);
 		break;
-	case  10:   //propeoscoefedit类
+	case  10:   //propeoscoefedit class 
 		//CentralFrame = new PropEosCoefEdit(this);
 		Centresize.setWidth(550);
 		Centresize.setHeight(330);
 		break;
-	case  11:   //propertyset类
+	case  11:   //propertyset class 
 		//CentralFrame = new propertyset(this);
 		Centresize.setWidth(173);
 		Centresize.setHeight(279);
 		break;
-	case  12:   //scalplot类
+	case  12:   //scalplot class 
 		//CentralFrame = new scalplot(this);
 		Centresize.setWidth(442);
 		Centresize.setHeight(295);
 		break;
-	case  13:   //timeslider类
+	case  13:   //timeslider class 
 		//CentralFrame = new timeslider(this);
 		Centresize.setWidth(670);
 		Centresize.setHeight(70);
 		break;
-	case  14:   //well3dshowset类
+	case  14:   //well3dshowset class 
 		//CentralFrame = new well3dshowset(this);
 		Centresize.setWidth(240);
 		Centresize.setHeight(144);
 		break;
-	case  15:   //QFileDialog类
+	case  15:   //QFileDialog class 
 		//CentralFrame = new QFileDialog(this);
 		Centresize.setWidth(435);
 		Centresize.setHeight(270);
@@ -260,7 +290,7 @@ void MyWidget::setCentralWidget(int WidgetIndex, bool istrag, bool domodel, bool
 	resizeInit = true;
 	this->setWindowFlags(Qt::FramelessWindowHint);
 	QDesktopWidget* desktopWidget = QApplication::desktop();
-	QRect screenRect = desktopWidget->screenGeometry();   //当前屏幕分辨率
+	QRect screenRect = desktopWidget->screenGeometry();   //current screen resolution
 	this->move((screenRect.width() - this->width())*0.5, (screenRect.height() - this->height())*0.5);
 	if (WidgetIndex != -1){
 		//QString qss;
@@ -588,7 +618,7 @@ void MyWidget::resizeEvent(QResizeEvent* e){
 		if (yper>maxper) maxper = yper;*/
 
 		double fx = (double)(curSizeX - 2.0*childGeo[1].width()) / Centresize.width();
-		double fy = (double)(curSizeY - childGeo[3].height() - childGeo[2].height()) / Centresize.height();   //两者的比例
+		double fy = (double)(curSizeY - childGeo[3].height() - childGeo[2].height()) / Centresize.height();   //windows resize ratio
 
 		Widgetresize(fx, fy);
 
@@ -600,13 +630,13 @@ void MyWidget::resizeEvent(QResizeEvent* e){
 void MyWidget::ScreenChange(){
 
 	int BaseSizeX = 1280;
-	int BaseSizeY = 720;  //基础分辨率
+	int BaseSizeY = 720;  //base Resolution
 
 	QDesktopWidget* desktopWidget = QApplication::desktop();
-	QRect screenRect = desktopWidget->screenGeometry();   //当前屏幕分辨率
+	QRect screenRect = desktopWidget->screenGeometry();   //current screen Resolution
 
 	double fx = (double)screenRect.width() / BaseSizeX;
-	double fy = (double)screenRect.height() / BaseSizeY;   //两者的比例
+	double fy = (double)screenRect.height() / BaseSizeY;   //Resolution ratio
 
 	Widgetresize(fx, fy);
 
@@ -691,7 +721,7 @@ void MyWidget::WidgetMinimun(){
 			frmpos = this->pos();
 			sizemode = 3;
 			QDesktopWidget* desktopWidget = QApplication::desktop();
-			QRect screenRect = desktopWidget->availableGeometry();   //当前屏幕分辨率		
+			QRect screenRect = desktopWidget->availableGeometry();   //current screen Resolution		
 			record_mid_size = false;
 			this->resize(screenRect.width(), screenRect.height());
 			record_mid_size = true;
@@ -718,7 +748,7 @@ void MyWidget::WidgetMinimun(){
 			sizemode = 2;
 			this->resize(MidSize.width(), MidSize.height());
 			QDesktopWidget* desktopWidget = QApplication::desktop();
-			QRect screenRect = desktopWidget->screenGeometry();   //当前屏幕分辨率
+			QRect screenRect = desktopWidget->screenGeometry();   //current screen Resolution
 			this->move(frmpos.x(), frmpos.y());
 			/*minbT->setIcon(QIcon(":/Icons/frmmaxbtstyle.png"));
 			minbT->setIconSize(QSize(minbT->width(), minbT->height()));*/

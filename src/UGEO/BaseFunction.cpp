@@ -1,7 +1,53 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     BaseFunction.cpp												 *
+*  @brief    Base function for computer Geometry                             *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  Base function for computer Geometry                     *
+*----------------------------------------------------------------------------*
+*  Change History :                                                          *
+*  <Date>     | <Version> | <Author>       | <Description>                   *
+*----------------------------------------------------------------------------*
+*  2018/01/24 | 1.0.0.1   | kailanghuang      | Create file                  *
+*  2018/04/10 | 2.0.0.1   | kailanghuang      | add In_planes function       *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include"BaseFunction.h"
+/**
+* @UMSM Namespace
+*/
 namespace UMSM {
 
+
 	bool In_planes(point pt1, point pt2, point pt3, point pt4){
+		/*
+			Coplanar 3D Points (p1,p2,p3,p4) 
+			* @return
+			*    true  : p1,p2,p3,p4 are in the same plane 
+			*    false : p1,p2,p3,p4 are not in the same plane 
+		*/
 		double a1 = pt2.x - pt1.x;
 		double b1 = pt2.y - pt1.y;
 		double c1 = pt2.z - pt1.z;
@@ -11,12 +57,19 @@ namespace UMSM {
 		double a3 = pt4.x - pt1.x;
 		double b3 = pt4.y - pt1.y;
 		double c3 = pt4.z - pt1.z;
-		//根据四点共面定理,若三个向量的混合积(AB,AC,AD)!=0,则四点不共面.
+		//  if the mixture product of three vectors (AB,AC,AD) == 0 
 		double value = (a1*b2*c3 + a2*b3*c1 + a3*b1*c2 - a3*b2*c1 - a1*b3*c2 - a2*b1*c3);
 		return abs(value)<1E-4;
 	}
 
 	bool Intersect_3d_lines(point pt1, point pt2, point pt3, point pt4, point &crossPt){
+		/*
+		judge if two lines (p1->p2,p3->p4) in the same plane
+		* @return
+		*    true  : if line p1->p2 intersect with line p3->p4  
+		*    false : else 
+		*    crossPt:  if intersect, return cross point of two lines
+		*/
 		double a1 = pt2.x - pt1.x;
 		double b1 = pt2.y - pt1.y;
 		double c1 = pt2.z - pt1.z;
@@ -26,14 +79,14 @@ namespace UMSM {
 		double a3 = pt4.x - pt1.x;
 		double b3 = pt4.y - pt1.y;
 		double c3 = pt4.z - pt1.z;
-		//根据四点共面定理,若三个向量的混合积(AB,AC,AD)!=0,则四点不共面.
+		////  if the mixture product of three vectors (AB,AC,AD) == 0 
 		double value = (a1*b2*c3 + a2*b3*c1 + a3*b1*c2 - a3*b2*c1 - a1*b3*c2 - a2*b1*c3);
 		if (abs(value) > 200){
-			printf("value: %.2f, 两直线异面，没有交点!\n",value);
+			printf("value: %.2f, There is no intersection between two lines !\n",value);
 			return false;
 		}
 		else{
-			//通过计算，得到交点的坐标
+			// By calculation, the coordinates of the intersection point are obtained
 			crossPt = pt1;
 			double ratio = a1*(pt4.y - pt3.y) - b1*(pt4.x - pt3.x);
 			double y_ratio = a1*(pt4.z - pt3.z) - c1 * (pt4.x - pt3.x);
@@ -80,7 +133,7 @@ namespace UMSM {
 		double a3 = u3.x - u1.x;
 		double b3 = u3.y - u1.y;
 		double c3 = u3.z - u1.z;
-		//根据四点共面定理,若三个向量的混合积(AB,AC,AD)!=0,则四点不共面.
+		//  if the mixture product of three vectors (AB,AC,AD) == 0 
 		double a0 = b2*c3 - b3*c2;
 		double b0 = a3*c2 - a2*c3;
 		double c0 = a2*b3 - a3*b2;
@@ -106,13 +159,13 @@ namespace UMSM {
 			double a3 = u3.x - u1.x;
 			double b3 = u3.y - u1.y;
 			double c3 = u3.z - u1.z;
-			//根据四点共面定理,若三个向量的混合积(AB,AC,AD)!=0,则四点不共面.
+			//  if the mixture product of three vectors (AB,AC,AD) == 0 
 			double c1 = -(a1*b2*c3 + a3*b1*c2 - a1*b3*c2 - a2*b1*c3)/(a2*b3 - a3*b2);
 			crossPt = v1;
 			crossPt.z = u1.z + c1;
 		}
 		if (!In_planes(u1, u2, u3, crossPt)){
-		 	cout << "不共面"<< endl;
+		 	cout << "non-coplanar"<< endl;
 		}
 		return true;
 	}
@@ -124,6 +177,11 @@ namespace UMSM {
 	}
 
 	void GetCornerBounds(point t1, point t2, double *Bounds){
+		/*
+			get Bounds from two points (p1,p2)
+			* @return
+			*    Bounds: (x1,y1)->(x2,y2)
+		*/
 		if (t1.x> t2.x){
 			Bounds[0] = t2.x;
 			Bounds[1] = t1.x;
@@ -156,7 +214,7 @@ namespace UMSM {
 		string_size i = 0;
 
 		while (i != s.size()){
-			//找到字符串中首个不等于分隔符的字母；
+			// Find the first letter in the string that does not equal the seperator
 			int flag = 0;
 			while (i != s.size() && flag == 0){
 				flag = 1;
@@ -168,7 +226,7 @@ namespace UMSM {
 				}
 			}
 
-			//找到又一个分隔符，将两个分隔符之间的字符串取出；
+			// Find another separator and pull out the string between the two
 			flag = 0;
 			string_size j = i;
 			while (j != s.size() && flag == 0){
@@ -217,6 +275,7 @@ namespace UMSM {
 		}
 	};
 
+	//  get Z depth from Line L1->L2
 	bool Intercept(const point L1, const point L2, point &Z) {
 		double v1 = sqrt((L2.x - L1.x)*(L2.x - L1.x) + (L2.y - L1.y)*(L2.y - L1.y));
 		double v2 = sqrt((Z.x - L1.x)*(Z.x - L1.x) + (Z.y - L1.y)*(Z.y - L1.y));				
@@ -226,13 +285,19 @@ namespace UMSM {
 		return true;		
 	};
 
-	//判两直线平行
+	// Judge that the two lines are parallel
 	int parallel(const point& u1, const point& u2, const point& v1, const point& v2){
 		return GPGzero(u1.x - u2.x)*(v1.y - v2.y) - (v1.x - v2.x)*(u1.y - u2.y);
 	}
 
-	//计算两线段交点,请判线段是否相交(同时还是要判断是否平行!)
 	bool intersection(const point& u1, const point& u2, const point& v1, const point& v2,point &ret){
+		/*
+			* Calculate the intersection point of two line segments (u1,u2), (v1,v2)
+			* @return
+			*		  true:  two line segments intersect
+			*		  false: else
+			*	      cross point:  ret is the cross point of two lines
+		*/
 		ret = u1;
 		double value = ((u1.x - u2.x)*(v1.y - v2.y) - (u1.y - u2.y)*(v1.x - v2.x));
 		bool isFlag = GPGzero(value);

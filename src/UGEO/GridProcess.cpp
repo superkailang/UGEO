@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     GridProcess.h													 *
+*  @brief    Grid Process for Scaling										 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  Grid Process for Scaling								 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include"GridProcess.h"
 
 namespace UMSM{
@@ -125,7 +155,7 @@ namespace UMSM{
 					break;
 				}
 			}
-			if (is_valid){ // 不存在;
+			if (is_valid){ // not exist ;
 				int temp_Face1 = Face1[j] < Face2[0] ? Face1[j] : Face2[0];
 				int temp_Face2 = Face1[j] > Face2[0] ? Face1[j] : Face2[0];
 				for (int j = 0; j < (int)FMerge.size(); j++){
@@ -173,14 +203,14 @@ namespace UMSM{
 	}
 	DataProcess::DataProcess(StrucGrid &SGridData, MyTree &Tree)
 	{		
-		//output_grid(SGridData, SGridData.NX/10, SGridData.NY/10, 2, 0); // 层位数+ 开始层位;
+		//output_grid(SGridData, SGridData.NX/10, SGridData.NY/10, 2, 0); // Number of Layers+ Start Layer index;
 		int dxx = 8, dyy = 8;
 		int i = 0;
-		vector<NodeDatas> noteDatas; // 保存构造树的缓存信息;
+		vector<NodeDatas> noteDatas; // Save the cache information for the construct tree;
 		SetParameter(dxx, dyy);
 		Initlization(SGridData);
 		MergeGrid(SGridData, noteDatas);
-		TreeInitlization(Tree, SGridData.Phasemaps[i].TopLayers, SGridData.Phasemaps[i].BottomLayers, noteDatas, SGridData); // Data 按照层位存储;
+		TreeInitlization(Tree, SGridData.Phasemaps[i].TopLayers, SGridData.Phasemaps[i].BottomLayers, noteDatas, SGridData); // Data Store by layer;
 		currentType = 0;
 		for (int j = 0; j < Tree.root->NumberChild; j++)
 		{
@@ -222,11 +252,11 @@ namespace UMSM{
 	}
 	void DataProcess::TreeChildInit(int Stage, intArray TopLayers, intArray BottomLayers, TreeNode *Note, StrucGrid &SGridData, int dxx, int dyy)
 	{
-		int indx1, indx2, dzz,KIndex,tempBottomIndex; // 分组;
+		int indx1, indx2, dzz,KIndex,tempBottomIndex; // Groupby ;
 		int TopIndex, BottomIndex, NumberChild;
 		TopIndex = Note->NodeData.KIndex + 1;
 		BottomIndex = Note->NodeData.KIndex + Note->NodeData.dz;
-		//获取 顶层Id_1 底层id_2; 小层数;
+		//get top Layer Index, bottom Layer Inedx ;
 		getLayer(TopLayers, BottomLayers, TopIndex, BottomIndex, indx1, indx2);
 		int NumberLayers = indx2 - indx1 + 1;
 		NodeDatas tempNoteDatas;
@@ -308,7 +338,7 @@ namespace UMSM{
 			FacieLayers.clear();
 		}
 		NumberChild = (int)tempNoteDatas.size();;
-		// 分配空间;
+		// Divide by Spatial ;
 		Note->NumberChild = NumberChild;
 		Note->childNotes = new TreeNode*[NumberChild];
 		for (int i = 0; i < NumberChild; i++)
@@ -334,7 +364,6 @@ namespace UMSM{
 			addCelsMap(tempIndex, 0, dy, Cells);						
 			FindNeighbor(Note, Cells, i);
 			Cells.clear();
-			// 上下点暂不考虑
 			addCelsMap(tempIndex, Note->childNotes[i]->NodeData.dz, Cells);//up;
 			SetUpDown(Note, Cells, i, true);
 			Cells.clear();
@@ -343,10 +372,10 @@ namespace UMSM{
 			Cells.clear();
 		}
 		/*
-		// 消除间隙点
+		// remove gap
 		intArray tempIdx;
 		for (int i = 0; i < Nc; i++){
-			if (Note->childNotes[i]->NodeData.isFine){  // 细网格;				
+			if (Note->childNotes[i]->NodeData.isFine){  // fine Grid;				
 				// left
 				if (Note->childNotes[i]->NodeData.neightbor.left.size()>0){
 					tempIdx = Note->childNotes[i]->NodeData.neightbor.left;
@@ -453,7 +482,7 @@ namespace UMSM{
 		//}
 	}
 	void SetUpDown(TreeNode *Note, intArray Cells, int jIdx,bool type){
-		// 上面还有且满足上面的所有i,j,k; 完整;
+		// top Surface and i,j,k index of Surface;
 		if (Cells.size() == 0){
 			;
 		}
@@ -474,7 +503,6 @@ namespace UMSM{
 					}
 					else{
 						if (type){
-							// 疑问？
 							Note->childNotes[jIdx]->NodeData.neightbor.up.push_back(jIdx);
 						}
 						else{
@@ -548,8 +576,8 @@ namespace UMSM{
 	void DataProcess::TreeChildInit2(int Stage, intArray TopLayers, intArray BottomLayers, TreeNode *Note, StrucGrid &SGridData, int dxx, int dyy)
 	{
 		NeightBor tempNeighbor=Note->NodeData.neightbor;
-		// 水平分割,垂直merge;
-		int indx1, indx2, dzz, KIndex, tempBottomIndex; // 分组;
+		// Horizontal split, vertical merge;
+		int indx1, indx2, dzz, KIndex, tempBottomIndex; // Group;
 		int TopIndex, BottomIndex, NumberChild;
 		TopIndex = Note->NodeData.KIndex + 1;
 		BottomIndex = Note->NodeData.KIndex + Note->NodeData.dz;
@@ -564,11 +592,11 @@ namespace UMSM{
 		int Nxy = Note->NodeData.dx*Note->NodeData.dy;
 		int *NegighBor = new int[Nxy], *Facies = new int[Nxy];
 
-		// 构造树子节点;
+		// Construct the tree subnodes;
 		Note->childNotes = new TreeNode*[NumberLayers];
 		Note->NumberChild = NumberLayers;
 		/*NumberChild = (int)tempNoteDatas.size();;
-		// 分配空间;
+		// Spatial Distribution;
 		Note->NumberChild = NumberChild;
 		for (int i = 0; i < NumberChild; i++)
 		{
@@ -593,9 +621,9 @@ namespace UMSM{
 			int iIndex, jIndex;
 			for (int _kk = 0; _kk < dzz; _kk++){
 				int Kidx = KIndex + _kk;
-				for (int j = 0; j < Note->NodeData.dy / dyy; j++)  // 不整除;
+				for (int j = 0; j < Note->NodeData.dy / dyy; j++)  //  not even divisible;
 				{
-					for (int i = 0; i < Note->NodeData.dx / dxx; i++) // 不整除;
+					for (int i = 0; i < Note->NodeData.dx / dxx; i++) //  not even divisible;
 					{
 						BGGindex Index(Note->NodeData.IIndex + i*dxx, Note->NodeData.JIndex + j*dyy, Kidx);
 						GetNeighbor(Note->NodeData.IIndex + i*dxx, Note->NodeData.JIndex + j*dyy, Kidx, dxx, dyy, Kidx, SGridData, NegighBor, Facies, tempNoteDatas, NoteMap, isFine, Index);
@@ -609,7 +637,7 @@ namespace UMSM{
 				if (dyy > 0)
 				{
 					jIndex = Note->NodeData.JIndex + Note->NodeData.dy / dyy*dyy;
-					for (int i = 0; i < Note->NodeData.dx / dxx; i++) // 不整除;
+					for (int i = 0; i < Note->NodeData.dx / dxx; i++) //  not even divisible;
 					{
 						BGGindex Index(Note->NodeData.IIndex + i*dxx, jIndex, Kidx);
 						GetNeighbor(Note->NodeData.IIndex + i*dxx, jIndex, Kidx, dxx, Note->NodeData.dy%dyy, Kidx, SGridData, NegighBor, Facies, tempNoteDatas, NoteMap, isFine, Index);
@@ -623,28 +651,28 @@ namespace UMSM{
 					}
 				}
 			}
-			// 构造树;
+			// construct the tree;
 			NumberChild = (int)tempNoteDatas.size();
-			if (NumberChild == 0){ // 不可细分;
+			if (NumberChild == 0){ // Cannot be subdivided;
 				BGGindex Index(Note->NodeData.IIndex, Note->NodeData.JIndex, KIndex);
 				get_cell_facies(Note->NodeData.IIndex, Note->NodeData.JIndex, KIndex, Note->NodeData.dx, Note->NodeData.dy, dzz, SGridData, NegighBor, Facies, tempNoteDatas, isFine, Index);
 				NumberChild = (int)tempNoteDatas.size();
 			};
 			NodeDatas noteDatas;
 			if (dzz > 1){
-				DownMergeGrid2(SGridData, noteDatas, tempNoteDatas, TopLayers, BottomLayers, NoteMap, true); // 判断垂向能否合并;
+				DownMergeGrid2(SGridData, noteDatas, tempNoteDatas, TopLayers, BottomLayers, NoteMap, true); //  judge if Vertical can merge;
 			}
 			else{
 				for (int xx = 0; xx < tempNoteDatas.size(); xx++){
 					tempNoteDatas[xx].dz = 1;
 					noteDatas.push_back(tempNoteDatas[xx]);
 				}
-				//DownMergeGrid2(SGridData, noteDatas, tempNoteDatas, TopLayers, BottomLayers, NoteMap, false); // 判断垂向能否合并;
+				//DownMergeGrid2(SGridData, noteDatas, tempNoteDatas, TopLayers, BottomLayers, NoteMap, false); //  judge if Vertical can merge;
 			}
 			tempNoteDatas = noteDatas;
 			NumberChild = (int)tempNoteDatas.size();
 			CPGNode node1;
-			node1.KIndex = indx1 + k; //保存树节点信息;
+			node1.KIndex = indx1 + k; //Save the tree node information;
 			Note->childNotes[k] = new TreeNode(NumberChild, node1);
 			for (int ii = 0; ii < NumberChild; ii++)
 			{
@@ -657,7 +685,7 @@ namespace UMSM{
 			tempNoteDatas.clear();
 			NoteMap.clear();
 		}
-		// 分配空间;
+		//  Spatial ;
 		/*Note->NumberChild = NumberChild;
 		Note->childNotes = new TreeNode*[NumberChild];
 		*/
@@ -690,11 +718,11 @@ namespace UMSM{
 			}
 		}		
 		FaceLayers.clear();
-		if (ATNUM == NGrid && JudgeFacies(Facies, ATNUM, FaceLayers, currentType)) // 合并; 情形讨论; 
+		if (ATNUM == NGrid && JudgeFacies(Facies, ATNUM, FaceLayers, currentType)) // merge;; 
 		{
 			bool firstflag = true;
 			JudgeFault(i,j,NegighBor, SGridData, firstflag, dxx, dyy);
-			// 判断断层
+			//  judge Faults
 			if (firstflag)
 			{
 				NoteMap.insert( make_pair(BGGindex(i, j, Layer), (int)noteDatas.size()));
@@ -714,13 +742,13 @@ namespace UMSM{
 			//else{
 			//	cout << "da" << endl;
 			//}
-			//if (ATNUM >= NGrid / 2) // 边界合并; 情形讨论;			
+			//if (ATNUM >= NGrid / 2) // Border mergers; discussion;			
 			//	 noteDatas.push_back(nodeData(i, j, dxx, dyy));			
 		}
 	}
 	void DataProcess::MergeGrid(StrucGrid &SGridData, vector<NodeDatas> &noteDatas)
 	{
-		// 初始化		
+		// Initlization		
 		int k = 0, currIdx = 0;
 		int *NegighBor = new int[dxy];
 		int *Facies = new int[dxy];
@@ -739,7 +767,6 @@ namespace UMSM{
 		{
 			TopLayer = SGridData.Phasemaps[0].TopLayers[k];
 			BottomLayer = SGridData.Phasemaps[0].BottomLayers[k];
-			//获取 顶层Id_1 底层id_2; 小层数;
 			getSingleLayer(SingleLayerTop, SingleLayerBottom, SGridData.Phasemaps, TopLayer, BottomLayer);
 			//for (int kk = 0; kk < (int)SingleLayerTop.size(); kk++){
 			int NumberLayer = (BottomLayer - TopLayer + 1);
@@ -751,9 +778,9 @@ namespace UMSM{
 				int layer_dz = NumberLayer;// SingleLayerBottom[k] - SingleLayerTop[k] + 1;
 				Layer = TopLayer-1; //SingleLayerTop[kk] - 1; // K
 				int kk = NumberLayer;
-				for (int j = 0; j < NY / dy; j++)  // 不整除;
+				for (int j = 0; j < NY / dy; j++)  //  not even divisible;
 				{
-					for (int i = 0; i < NX / dx; i++) // 不整除;
+					for (int i = 0; i < NX / dx; i++) //  not even divisible;
 					{
 						BGGindex Index(i*dx, j*dy, Layer);
 						GetNeighbor(i*dx, j*dy, Layer, dx, dy, kk, SGridData, NegighBor, Facies, TempnoteDatas, NoteMap, isFine, Index);
@@ -767,7 +794,7 @@ namespace UMSM{
 				if (dyy > 0)
 				{
 					int jIndex = NY - NY%dy;
-					for (int i = 0; i < NX / dx; i++) // 不整除;
+					for (int i = 0; i < NX / dx; i++) //  not even divisible;
 					{
 						BGGindex Index(i*dx, jIndex, Layer);
 						GetNeighbor(i*dx, jIndex, Layer, dx, dyy, kk, SGridData, NegighBor, Facies, TempnoteDatas, NoteMap, isFine, Index);
@@ -781,11 +808,11 @@ namespace UMSM{
 				}
 				//update;
 				TempnoteDatas2.insert(TempnoteDatas2.end(), TempnoteDatas.begin() + currIdx, TempnoteDatas.end());
-				//updateCoord(SGridData, NX, NY, NZ, dx, dy, 0, TempnoteDatas2, PostPillars); // 水平间隙处理;  
+				//updateCoord(SGridData, NX, NY, NZ, dx, dy, 0, TempnoteDatas2, PostPillars); // deal with Horizontal gap;  
 				currIdx = (int)TempnoteDatas.size();
 				TempnoteDatas2.clear();
 			//}
-			DownMergeGrid2(SGridData, noteData, TempnoteDatas, SingleLayerTop, SingleLayerBottom, NoteMap, false); // 判断垂向能否合并;
+			DownMergeGrid2(SGridData, noteData, TempnoteDatas, SingleLayerTop, SingleLayerBottom, NoteMap, false); //  judge if vertical merge;
 			noteDatas.push_back(noteData);
 			noteData.clear();
 			NoteMap.clear();
@@ -794,13 +821,13 @@ namespace UMSM{
 			SingleLayerBottom.clear();
 		}
 		// Set_XY_Coords(PostPillars, SGridData.NX, SGridData.NY, SGridData, isFaultPillar);
-		// 缺少垂向间隙判断处理;
-		// 上下底面;
+		//  judge deal with ;
+		// top and Bottom Surface ;
 		// get_Zcoorn_Pillar(SGridData, SGridData.NX, SGridData.NY, SGridData.NZ, dx, dy, 0, noteDatas, PostPillars);
 	}
 	void DataProcess::DownMergeGrid2(StrucGrid &SGridData, NodeDatas &noteDatas, NodeDatas &TempNote, intArray SingleTopLayer, intArray SingleBottomLayer, map<BGGindex, int> &NoteMap, bool isDivided)
 	{
-		int Layers = SingleBottomLayer.back() - SingleTopLayer[0]; // 总层位;
+		int Layers = SingleBottomLayer.back() - SingleTopLayer[0]; // total Layers;
 		int TopLayer = SingleTopLayer[0] - 1;
 		int Size = (int)TempNote.size();
 		std::map<BGGindex, int>::iterator iter;
@@ -808,7 +835,7 @@ namespace UMSM{
 			for (int i = 0; i < Size; i++)
 			{
 				if (!TempNote[i].visted){
-					if (TempNote[i].dz == Layers){  // 全部包含结束;
+					if (TempNote[i].dz == Layers){  // All Included Finished ;
 						TempNote[i].dz = 1; //SingleBottomLayer[Layers] - SingleTopLayer[Layers] + 1;
 						noteDatas.push_back(TempNote[i]);
 					}
@@ -817,13 +844,13 @@ namespace UMSM{
 						for (int k = (TempNote[i].dz + 1); k <= Layers; k++) 
 						{
 							iter = NoteMap.find({ BGGindex( TempNote[i].i, TempNote[i].j, TopLayer + k) });
-							if (iter == NoteMap.end()){ //下面不存在
+							if (iter == NoteMap.end()){ //下Surface not exist 
 								TempNote[i].dz = k - TempNote[i].dz;
 								noteDatas.push_back(TempNote[i]);
 								break;
 							}
 							else{
-								// 判断能否合并 Facies属性是否相同;
+								//  judge if can be merged ，Facies property whether it is same or not;
 								int Index = iter->second;
 								intArray TempFace2 = TempNote[Index].FaceLayers;//SGridData.FACIES[GetCecllId(TempNote[Index].i, TempNote[Index].j, TempNote[Index].k, NX, NY, NZ)];
 								if (isMerge(TempFacies, TempFace2) && isLayer_merge(TempNote[Index],TempNote[i])){
@@ -834,7 +861,7 @@ namespace UMSM{
 									}
 								}
 								else{
-									// 不能合并
+									// Can't merge
 									TempNote[i].dz = k - TempNote[i].dz;// SingleBottomLayer[k - 1] - SingleTopLayer[TempNote[i].dz] + 1;
 									noteDatas.push_back(TempNote[i]);
 									break;
@@ -872,18 +899,18 @@ namespace UMSM{
 						noteDatas.push_back(TempNote[i]);
 					}
 					else{
-						//int TempFacies = SGridData.FACIES[GetCecllId(TempNote[i].i, TempNote[i].j, TempNote[i].k, NX, NY, NZ)]; //当前note Faceis;
+						//int TempFacies = SGridData.FACIES[GetCecllId(TempNote[i].i, TempNote[i].j, TempNote[i].k, NX, NY, NZ)]; //current note Faceis;
 						intArray TempFacies = TempNote[i].FaceLayers;
 						for (int k = TempNote[i].dz + 1; k <= Layers; k++)
 						{
 							iter = NoteMap.find({ BGGindex(TempNote[i].i, TempNote[i].j, SingleTopLayer[k] - 1) });
-							if (iter == NoteMap.end()){ //下面不存在
+							if (iter == NoteMap.end()){ //下Surface not exist 
 								TempNote[i].dz = SingleBottomLayer[k - 1] - SingleTopLayer[TempNote[i].dz] + 1;
 								noteDatas.push_back(TempNote[i]);
 								break;
 							}
 							else{
-								// 判断能否合并 Facies属性是否相同;
+								//  judge if is merge, Facies property if is same;
 								int Index = iter->second;
 								intArray TempFace2 = TempNote[Index].FaceLayers;//SGridData.FACIES[GetCecllId(TempNote[Index].i, TempNote[Index].j, TempNote[Index].k, NX, NY, NZ)];
 								if (isMerge(TempFacies, TempFace2)){
@@ -917,7 +944,7 @@ namespace UMSM{
 	
 	void DataProcess::Initlization(StrucGrid &SGridData)
 	{
-		// 排序树索引
+		// sort tree Index
 		if (SGridData.Phasemaps.size() > 0)
 		{
 			for (int i = 0; i < (int)SGridData.Phasemaps.size(); i++)
@@ -927,7 +954,7 @@ namespace UMSM{
 			}
 			sort(SGridData.Phasemaps.begin(), SGridData.Phasemaps.end());
 		}
-		// 计算Cell八个点的数据
+		//  calculate Cell 8 Point Data 
 		NX = SGridData.NX; NY = SGridData.NY; NZ = SGridData.NZ;
 
 		int nPillar = (SGridData.NX + 1)*(SGridData.NY + 1);
@@ -1000,7 +1027,7 @@ namespace UMSM{
 	}
 	void DataProcess::JudgeFault(int idx, int jdx, int *NegighBor, StrucGrid &SGridData, bool &firstflag, int dxx, int dyy)
 	{
-		//// 内部线; 
+		////  internal Lines ; 
 		int d2, d1, tempPillar;
 		int c1 = NegighBor[0];
 		for (d2 = 0; d2 <= dyy; d2++)
@@ -1045,7 +1072,7 @@ namespace UMSM{
 			}
 		}
 		FaceLayers.clear();
-		JudgeFacies(Facies, ATNUM, FaceLayers, currentType); // 合并; 情形讨论; 
+		JudgeFacies(Facies, ATNUM, FaceLayers, currentType); // judge if can be merged; 
 		noteDatas.push_back(nodeData(i, j, Layer, dxx, dyy, dzz, FaceLayers, isFine, Index));
 	}
 
@@ -1136,7 +1163,7 @@ namespace UMSM{
 			}
 			if (dyy2 != 0){
 				int jDx = JIndex + dyy * 2;
-				for (int i = 0; i < (Ni); i++) // 不整除;
+				for (int i = 0; i < (Ni); i++) //  not even divisible;
 				{
 					int iDx = iIndex + dxx * i;
 					GetNeighbor(iDx, jDx, KIndex, dxx, dyy2, dzz, SGridData, NegighBor, Facies, noteDatas, NoteMap, isFine, Index);
@@ -1214,7 +1241,7 @@ namespace UMSM{
 	void DataProcess::TreeInitlization(MyTree &Tree, intArray TopLayers, intArray BottomLayers, vector<NodeDatas> nodeDatas, StrucGrid &SGridData)
 	{
 		int stage = 0;
-		//创建树 void MyTree::createTree(TreeNode * &node, intArray TopLayers, intArray BottomLayers, NodeDatas nodeDatas, StrucGrid SGridData);
+		//create Tree void MyTree::createTree(TreeNode * &node, intArray TopLayers, intArray BottomLayers, NodeDatas nodeDatas, StrucGrid SGridData);
 		int NumberChild = (int)nodeDatas.size();
 		CPGNode nodeData;
 		// nodeData.KIndex = TopLayers[0]-1; nodeData.dz = BottomLayers.back() - TopLayers[0]+1;
@@ -1234,7 +1261,7 @@ namespace UMSM{
 	}
 	void DataProcess::Merge(StrucGrid &SGridData, nodeData NoteData, int NX, int NY, CPGNode &node)
 	{
-		//	// 合并 X,Y;
+		//	// merge  X,Y Direction
 		double BULKVOLUME = 0, DZMTRXV = 0, PORO = 0, PERMEABILITY = 0, SOIL = 0;
 		int *Facies,dd[4];		
 		int temp = NoteData.i + NoteData.j*NX + NoteData.k*NX*NY;
@@ -1314,7 +1341,7 @@ namespace UMSM{
 					node.FACIES = NoteData.FaceLayers[1];//MergeFace( Facies, c2);
 					tempid = tempid > 0 ? 1 : 0;
 					if (node.FACIES != tempid){
-						node.FACIES = tempid;//cout << "属性合并出问题" << endl;
+						node.FACIES = tempid;//cout << "property merge Error" << endl;
 					}
 				}
 			}
@@ -1323,7 +1350,7 @@ namespace UMSM{
 				node.FACIES = MergeFace(Facies, c2);
 			}
 		}
-		//生成粗化的网格
+		//To generate a coarsened Grid
 		node.ACTNUM = 1;
 		for (int m = 0; m < 4; m++)
 		{
@@ -1440,7 +1467,7 @@ namespace UMSM{
 
 
 	
-	// 获取垂向间隙;
+	// get Pillar From Grid;
 	void DataProcess::get_Zcoorn_Pillar(StrucGrid &SGridData, int NX, int NY, int NZ, int dx, int dy, int dz, vector<NodeDatas> noteDatas, FracPillars &PostPillars){
 		int dxx = NX % dx;
 		int dyy = NY % dy;
@@ -1449,13 +1476,13 @@ namespace UMSM{
 		std::map<Pillarindex3, CellIdxProps>::iterator iter;
 		for (int i = 0; i < noteDatas.size(); i++){
 			for (int j = 0; j < noteDatas[i].size(); j++){
-				for (int xx = 0; xx < 2; xx++){ // 上下底面;
+				for (int xx = 0; xx < 2; xx++){ // top and bottom Surface ;
 					int Kidx = noteDatas[i][j].k + xx * noteDatas[i][j].dz;
 					int ddx = noteDatas[i][j].dx;
 					int ddy = noteDatas[i][j].dy;
 					int idx = noteDatas[i][j].i;
 					int jdx = noteDatas[i][j].j;
-					// 遍历 dx,dy 所有的索引;
+					// Loop dx,dy all Index;
 					for (int dd = 0; dd <= ddx; dd++){
 						int temp_i = idx + dd;
 						for (int mm = 0; mm <= ddy; mm++){
@@ -1470,7 +1497,7 @@ namespace UMSM{
 		iter = PillarMap.begin();
 		NodeDatas tempNotes;
 		while (iter != PillarMap.end()){
-			if ( iter->second.size() >= 2 ){ // 从中挑出
+			if ( iter->second.size() >= 2 ){ // iteration to update Zcoors
 				for (int c_ = 0; c_ < iter->second.size(); c_++){
 					tempNotes.push_back(noteDatas[iter->second[c_].i][iter->second[c_].j]);
 				};
@@ -1482,7 +1509,7 @@ namespace UMSM{
 		PillarMap.clear();
 	};
 
-	// 更新柱线;
+	//update Pillars;
 	void DataProcess::updateCoord(StrucGrid &SGridData, int NX, int NY, int NZ, int dx, int dy, int dz, NodeDatas TempnoteDatas, FracPillars &PostPillars){
 		int dxx = NX % dx;
 		int dyy = NY % dy;
@@ -1490,13 +1517,13 @@ namespace UMSM{
 		map<Pillarindex, CellProps> PillarMap;
 		std::map<Pillarindex, CellProps>::iterator iter;
 		for (int i = 0; i < TempnoteDatas.size(); i++){
-			//如果为细分网格；
+			//if refined Grid；
 			int ddx = TempnoteDatas[i].dx;
 			int ddy = TempnoteDatas[i].dy;
-			// if (ddx < dx && ddy < dy){  // 细分网格;
+			// if (ddx < dx && ddy < dy){  // refined Grid;
 			int idx = TempnoteDatas[i].i;
 			int jdx = TempnoteDatas[i].j;
-			// 遍历 dx,dy 所有的索引;
+			// Loop dx,dy all Index;
 			for (int dd = 0; dd <= ddx; dd++){
 				int temp_i = ddx *dd;
 				for (int mm = 0; mm <= ddy; mm++){
@@ -1509,7 +1536,7 @@ namespace UMSM{
 		iter = PillarMap.begin(); 
 		NodeDatas tempNotes;
 		while (iter != PillarMap.end()){
-			if (iter->second.size() == 3){ // 从中挑出 ArraySize==3; 
+			if (iter->second.size() == 3){ // ArraySize==3; 
 				// UpdateCoords(iter->first.i, iter->first.j, 1, 1, NX, NY, SGridData, isFaultPillar); 
 				for (int c_ = 0; c_ < iter->second.size(); c_++){
 					tempNotes.push_back(TempnoteDatas[iter->second[c_].cellIdx]);
@@ -1523,7 +1550,7 @@ namespace UMSM{
 		PillarMap.clear();
 	};
 	
-	// 更新 Coords X,Y Direction; (只更新 Top，未考虑断层;)
+	// Update Coords X,Y Direction; (only Update Top Layers，without taking into account Faults;)
 	void DataProcess::UpdateCoords(int i, int j, int dxx, int dyy, int Nx, int Ny, StrucGrid &SGridData, bool *isFaultPillar){
 		int ii, jj;
 		int statIdx;
@@ -1538,7 +1565,7 @@ namespace UMSM{
 		ii = (ii == Nx ? ii - 1 : ii);
 		jj = (jj == Ny ? jj - 1 : jj);
 		int temp = (ii + jj * (Nx + 1)) * 6;
-		// 断层判断; 返回;
+		// Fault judge ; return ;
 		for (int mm = ii; mm <= ii + dx; mm++){
 			for (int nn = jj; nn <= jj + dy; nn++){
 				if (mm <= Nx && nn <= Ny){
@@ -1561,7 +1588,7 @@ namespace UMSM{
 		}
 		for (int xx = 0; xx < 2; xx++){
 			for (int mm = 0; mm < 4; mm++){
-				if (mm % 2 == 0){       //X方向上柱线;
+				if (mm % 2 == 0){       //X direction pillars;
 					jj = mm / 2 * dyy;
 					for (int ii = 0; ii <= dxx; ii++){
 						if (setPillarIdxs(isFaultPillar, ii + i, jj + j, dx, dy, Nx, Ny, dd)){
@@ -1589,7 +1616,7 @@ namespace UMSM{
 					else{
 						ii = 0;
 					}
-					// ofstream outPutText("测试")
+					// ofstream outPutText("testing")
 					for (int jj = 0; jj <= dyy; jj++){
 						FaultIdx = (i + ii + (j + jj) * (Nx + 1));
 						L1 = FaultIdx * 6 + 3 * xx;
@@ -1612,11 +1639,11 @@ namespace UMSM{
 		}
 	}
 
-	// 更新 Coords X,Y Direction; (2019-1-12)
+	// Update Coords X,Y Direction; (2019-1-12)
 	void DataProcess::UpdateXY_Coords(Pillarindex pillar, CellProps cells, NodeDatas nodeDatas, FracPillars &PostPillars){
 		int EndCellIdx = -1;
 		int dt_x = 1E5, dt_y = 1E5;
-		// 获取EndPt;
+		// get EndPt;
 		for (int i = 0; i < nodeDatas.size(); i++){
 			if (!cells[i].isEndPt){
 				EndCellIdx = i;
@@ -1627,7 +1654,7 @@ namespace UMSM{
 			}
 		}
 		if (EndCellIdx >= 0){
-			// 获取两条柱线;
+			// get two pillars;
 			int index;
 			int temp[4][2] = { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } };
 			int left_temp[4][2] = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
@@ -1643,7 +1670,7 @@ namespace UMSM{
 			if (nodeDatas[EndCellIdx].j + nodeDatas[EndCellIdx].dy == pillar.j){
 				index = 2;
 			};
-			// 两条柱线;
+			// get two pillars;;
 			vector<Pillarindex> pillarIdxs;
 			for (int i = 0; i < 2; i++){
 				int p2 = (index + i) % 4;
@@ -1657,12 +1684,12 @@ namespace UMSM{
 		}
 	}
 
-	// 更新 Zcorns Direction; (2019-1-29);
+	// Update Zcorns Direction; (2019-1-29);
 	void DataProcess::Update_Zcorns(Pillarindex3 pillars, CellIdxProps cells, int NX, int NY, int NZ, NodeDatas nodeDatas, StrucGrid &SGridData) {
 		int EndCellIdx = -1;
 		int dt_x = 0, dt_y = 0,max_range_idx=-1;
 		bool isEndFlag = false;
-		// 获取EndPt;
+		// get EndPt;
 		for (int i = 0; i < nodeDatas.size(); i++){
 			if (!cells[i].isEndPt){
 				if (dt_x < nodeDatas[i].dx && dt_y < nodeDatas[i].dy){
@@ -1680,10 +1707,10 @@ namespace UMSM{
 		point crossPts;
 		point *Pts = new point[6];
 		int tempArray[4][2] = { { 0, 0 }, { 1, 0 }, { 1, 1 }, {0,1} };
-		if ( max_range_idx >= 0 && isEndFlag){  // 表示有端点且不一致;
+		if ( max_range_idx >= 0 && isEndFlag){  // Means there are endpoints and they are inconsistent;
 			if (nodeDatas[EndCellIdx].dx < nodeDatas[max_range_idx].dx && nodeDatas[EndCellIdx].dy < nodeDatas[max_range_idx].dy){
 				if (nodeDatas[EndCellIdx].k != nodeDatas[max_range_idx].k){
-					//获取两条柱线;
+					//get two pillars;;
 					cellpillas.push_back(Pillarindex3(pillars.i, pillars.j, nodeDatas[max_range_idx].k));
 					cellpillas.push_back(Pillarindex3(pillars.i, pillars.j, nodeDatas[EndCellIdx].k));
 					for (int dd = 0; dd < 4; dd++){
@@ -1741,7 +1768,7 @@ namespace UMSM{
 			for (int xx = 0; xx < 2; xx++){
 				bool isValid = true;
 				L1 = Pillar_Idx * 6 + 3 * xx;
-				point v1(SGridData.Coord[L1], SGridData.Coord[L1 + 1], SGridData.Coord[L1 + 2]);// v1 为原始点;
+				point v1(SGridData.Coord[L1], SGridData.Coord[L1 + 1], SGridData.Coord[L1 + 2]);// v1 as orginal point;
 				int statIdx;
 				for (int Np = 0; Np < 4; Np++){
 					statIdx = (pillarIdxs[Np].i + pillarIdxs[Np].j * (Nx + 1)) * 6 + 3 * xx;
@@ -1761,7 +1788,7 @@ namespace UMSM{
 				}
 				Lines.push_back(crossPt);
 			}
-			// 更新Z坐标;
+			// update Z coordinates;
 			if (PostPillar[ii].isValid){
 				Set_zcoords(pillar.i, pillar.j, SGridData.NX, SGridData.NY, SGridData.NZ, SGridData.Coord, SGridData.Zcorn, SGridData.CPGCells);
 			}
@@ -1799,8 +1826,8 @@ namespace UMSM{
 					// Intersect_3d_lines(Lines[2*ii], Lines[2*ii+1], Pt3, Pt4, crossPt);
 					if (SGridData.ACTNUM[cellIdx1] && SGridData.ACTNUM[cellIdx2] && SGridData.ACTNUM[CellIdx]){
 						if (Intersect_3d_lines(SGridData.CPGCells[cellIdx1].corner[delta_spacing], SGridData.CPGCells[cellIdx2].corner[delta_spacing], Lines[2 * ii], Lines[2 * ii + 1], crossPt)){
-							//	//	// 更新Z-coords;
-							// 8 个点坐标;
+							//	//	// updateZ-coords;
+							// 8 points coordinates;
 							// point p1 = SGridData.CPGCells[CellIdx].corner[0 + delta_spacing];
 							if (SGridData.ACTNUM[CellIdx]){
 								SGridData.CPGCells[CellIdx].corner[0 + delta_spacing] = crossPt;
@@ -1875,7 +1902,7 @@ namespace UMSM{
 		point crossPt;
 		point *Pts = new point[4];
 		int dt_x = 0, dt_y = 0;
-		// 获取EndPt;
+		// get EndPt;
 		for (int i = 0; i < nodeDatas.size(); i++){
 			if (!cells[i].isEndPt){
 				EndCellIdx = i;
@@ -1886,7 +1913,7 @@ namespace UMSM{
 			}
 		}
 		if (EndCellIdx >= 0){
-			// 获取两条柱线;
+			// Get two pillars;
 			int index;
 			int temp[4][2] = { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } };
 			int left_temp[4][2] = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
@@ -1902,7 +1929,7 @@ namespace UMSM{
 			if (nodeDatas[EndCellIdx].j + nodeDatas[EndCellIdx].dy == pillar.j){
 				index = 2;
 			};
-			// 两条柱线;
+			// two pillars;
 			vector<Pillarindex> pillarIdxs;
 			for (int i = 0; i < 2; i++){
 				int p2 = (index + i) % 4;
@@ -1916,7 +1943,7 @@ namespace UMSM{
 				int Pillar_Idx = (pillar.i + pillar.j * (Nx + 1));
 				int L1 = Pillar_Idx * 6 + 3 * xx;
 				point v1(SGridData.Coord[L1], SGridData.Coord[L1 + 1], SGridData.Coord[L1 + 2]);
-				// 生成Pts;
+				// generate Pts;
 				int statIdx;
 				//ofstream Pts_txt("pillar.txt");
 				for (int Np = 0; Np < 4; Np++){
@@ -1927,8 +1954,7 @@ namespace UMSM{
 					//Pts_txt << Pts[Np].x << " " << Pts[Np].y << endl;
 				}
 				//Pts_txt.close();
-				// 求交点更新位置;
-				// v1 为原始点;
+				// get cross point;
 				setPillarPts(Pts, crossPt, v1, SGridData.Coord, L1);
 			}
 		}
@@ -1943,7 +1969,7 @@ namespace UMSM{
 		dd[0] = -1;
 		dd[1] = -2 * Nx;
 		dd[2] = -2 * Nx - 1;
-		// 不包括边界点  ????
+		// not inlcude boundary points
 		for (int i = 1; i < Nx; i++){
 			for (int j = 1; j < Ny; j++){
 				pillarIdx = i + j* (Nx + 1);
@@ -2046,16 +2072,15 @@ namespace UMSM{
 		}
 	}
 	
-	// 更新Zcoords;
+	// update Zcoords;
 	void update(){
-
-		// Zcorn[index]; // 四个方向全部更新;
+		// Zcorn[index]; // update 4 Direction;
 	}
 
 
 	void output_grid(StrucGrid &SGrid, int nx, int ny, int nz, int k_start){
-		// 输出Coords;
-		cout << "输出网格: " << nx << " "<< ny << " "<<  nz << " ，"<<  endl;
+		// output Coords;
+		cout << "output Grid: " << nx << " "<< ny << " "<<  nz << " ，"<<  endl;
 		ofstream CoordsTxt("coord.txt");
 		int Nx, Ny, Nz, PillarIdx;
 		Nx = SGrid.NX;  Ny = SGrid.NY;  Nz = SGrid.NZ;

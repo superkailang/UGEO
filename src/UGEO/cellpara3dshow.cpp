@@ -1,4 +1,34 @@
-﻿#include "cellpara3dshow.h"
+﻿/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     cellpara3dshow.h												 *
+*  @brief    core class for 3d Grid Plot									 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  core class for 3d Grid Plot							 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
+#include "cellpara3dshow.h"
 #include "QtGui"
 #include"commands.h"
 #include"fileReader.h"
@@ -15,7 +45,7 @@
 
 
 
-static void MouseWheelEvent(vtkObject *caller, unsigned long eid, void *clientdata, void *calldata) //面拾取函数
+static void MouseWheelEvent(vtkObject *caller, unsigned long eid, void *clientdata, void *calldata) //Surface pick function
 {
 	cellpara3dshow *parent = (cellpara3dshow*)clientdata;
 	double distance;
@@ -62,20 +92,20 @@ cellpara3dshow::cellpara3dshow(QWidget *parent)
 	connect(this->ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(WinTabChange(int)));
 
 	this->undoStack = new QUndoStack(this);
-	currentbackcolor.setRgbF(1.0, 1.0, 1.0, 1.0); //背景色
-	celllinecolor.setRgbF(128 / 256.0, 128 / 256.0, 128 / 256.0, 1.0); //网格线颜色
+	currentbackcolor.setRgbF(1.0, 1.0, 1.0, 1.0); //Background Color
+	celllinecolor.setRgbF(128 / 256.0, 128 / 256.0, 128 / 256.0, 1.0); //Grid line color
 	//model3data.col.append(QColor(0, 0, 255, 255));
 	//model3data.col.append(QColor(5, 213, 255, 255));
 	//model3data.col.append(QColor(5, 255, 160, 255));
 	//model3data.col.append(QColor(36, 255, 3, 255));
 	//model3data.col.append(QColor(255, 255, 3, 255));
 	//model3data.col.append(QColor(255, 160, 7, 255));
-	//model3data.col.append(QColor(255, 0, 0, 255));  //默认色卡体系
+	//model3data.col.append(QColor(255, 0, 0, 255));  //default color bar 
 	this->setWindowTitle("GEO VIEW");
-	CreatTopToolBar(); //创立顶部的工具栏
-	CreatRightToolBar(); //创立右部的工具栏 
-	AddToolBarConnection(); //添加工具栏响应事件
-	creatMenuBar(); //建立菜单栏
+	CreatTopToolBar(); //create top toolbars
+	CreatRightToolBar(); //create right toolbars 
+	AddToolBarConnection(); //Add toolbars response events
+	creatMenuBar(); //create menus
 	SetStatusLabel();			
 	righttoolbar->setMouseTracking(true);
 	AddTabWidget();
@@ -231,7 +261,7 @@ void cellpara3dshow::readGrid(QString FileName, FileReader Fileftp){
 		query.isSpace = false;
 		query.LOD = 0;
 		
-		// 输出部分网格;
+		// Output part grid
 		/*
 		  SGrid, nx, ny,nz;
 		*/
@@ -295,9 +325,9 @@ void cellpara3dshow::InitDrawGrid(){
 			}
 			break;
 		case 0:
-			GetTreeNodeBoundary(0,0,Tree.root, SGrid, ZoneDatas); // 优化获取LOD1 的可视面;
+			GetTreeNodeBoundary(0,0,Tree.root, SGrid, ZoneDatas); // get LOD1 visible Surface ;
 			if (isFirstGrid){
-				GetNodeCellRange(0, 0, Tree.root, tempCellRange,isPropFlag); // 迭代获取属性值;
+				GetNodeCellRange(0, 0, Tree.root, tempCellRange,isPropFlag); // Iterates to get the property value;
 			}
 			break;
 		case 1:
@@ -305,10 +335,10 @@ void cellpara3dshow::InitDrawGrid(){
 				GetNodeBoundary(Tree.root, SGrid, ZoneDatas);
 			}
 			else{
-				GetTreeNodeBoundary(0,1,Tree.root, SGrid, ZoneDatas); // 优化获取LOD1 的可视面
+				GetTreeNodeBoundary(0,1,Tree.root, SGrid, ZoneDatas); // get LOD1 visible Surface ;
 			}
 			if (isFirstGrid){
-				GetNodeCellRange(0, 2, Tree.root, tempCellRange, isPropFlag); // 迭代获取属性值; 
+				GetNodeCellRange(0, 2, Tree.root, tempCellRange, isPropFlag); // Iterates to get the property value;
 			}
 			break;
 		default:
@@ -365,16 +395,16 @@ void cellpara3dshow::SetStatusLabel()
 	/*
 	statusmsgLabel = new QLabel;
 	statusmsgLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); //lable
-	statusBar()->addWidget(statusmsgLabel, 1); //状态栏	
+	statusBar()->addWidget(statusmsgLabel, 1); //Status Bar	
 
 	zdirmultLabel = new QLabel;
 	zdirmultLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); //lable
-	statusBar()->addWidget(zdirmultLabel, 1); //状态栏
+	statusBar()->addWidget(zdirmultLabel, 1); //Status Bar
 	zdirmultLabel->setText("Z axis scale: 1.0");
 
 	rotateSumLabel = new QLabel;
 	rotateSumLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); //lable
-	statusBar()->addWidget(rotateSumLabel, 1); //状态栏	
+	statusBar()->addWidget(rotateSumLabel, 1); //Status Bar
 
 	distanceLabel = new QLabel;
 	distanceLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); //lable
@@ -382,7 +412,8 @@ void cellpara3dshow::SetStatusLabel()
 
 	kkLabel = new QLabel;
 	kkLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter); //lable
-	statusBar()->addWidget(kkLabel, 7); //状态栏	
+	statusBar()->addWidget(kkLabel, 7); //Status Bar
+	
 
 	statusBar()->setStyleSheet(
 		"background : #41719c;"
@@ -398,13 +429,13 @@ void cellpara3dshow::SetFont()
 	SystemFont.setFamily("Arial");
 	SystemFont.setPixelSize((font_size));
 	SystemFont.setBold(true);
-	//SystemFont.setFamily("黑体");
+	//SystemFont.setFamily("SimHei");
 	//SystemFont.setPointSize(8);
 	//Modeldockwidget->setFont(SystemFont);
 	///ReservoirInfowidget->
 	//Inputdockwidget->setStyleSheet("QDockwidget{font:bold}");	
 }
-void cellpara3dshow::creatMenuBar()  //创立菜单栏
+void cellpara3dshow::creatMenuBar()  //create menus
 {
 	QMenu *Filemenu = menuBar()->addMenu("File");
 	OpenFile = Filemenu->addAction(QIcon(":/Icons/Load_dynamic_properties.png"), tr(" Open File Path"));
@@ -427,7 +458,7 @@ void cellpara3dshow::creatMenuBar()  //创立菜单栏
 	menuBar()->setStyleSheet("background : #d6dbe9;");
 	this->setContextMenuPolicy(Qt::CustomContextMenu);
 }
-void cellpara3dshow::CreatTopToolBar()    //创建顶部的工具条
+void cellpara3dshow::CreatTopToolBar()    //create top toolbar 
 {
 	//mainToolBar
 	colfaceaction = new QAction(QIcon(":/Icons/cellface.png"), tr("&Colorface"), this); colfaceaction->setToolTip(tr("Show/hide surfaces")); ui.mainToolBar->addAction(colfaceaction);
@@ -452,7 +483,7 @@ void cellpara3dshow::CreatTopToolBar()    //创建顶部的工具条
 	ui.mainToolBar->setIconSize(iconsize);
 	ui.mainToolBar->setMouseTracking(true);
 }
-void cellpara3dshow::CreatRightToolBar()    //创建右边的工具条
+void cellpara3dshow::CreatRightToolBar()    //create right toolbars
 {
 	//rightToolBar
 	righttoolbar = new QToolBar(this);
@@ -464,7 +495,7 @@ void cellpara3dshow::CreatRightToolBar()    //创建右边的工具条
 	QSize iconsize(36, 36);
 	righttoolbar->setIconSize(iconsize);
 }
-void cellpara3dshow::AddToolBarConnection() //添加工具条上Action的响应事件
+void cellpara3dshow::AddToolBarConnection() //add toolbars Actions response events
 {
 	//MenuBar
 	undoAction = undoStack->createUndoAction(this, tr("&Undo"));
@@ -472,13 +503,13 @@ void cellpara3dshow::AddToolBarConnection() //添加工具条上Action的响应�
 
 	redoAction = undoStack->createRedoAction(this, tr("&Redo"));
 	redoAction->setShortcuts(QKeySequence::Redo);
-	//顶部工具栏按钮响应
+	//top toolbars buttons events
 	connect(colfaceaction, SIGNAL(triggered()), this, SLOT(FaceShow()));
 	connect(lineframeaction, SIGNAL(triggered()), this, SLOT(CellLineShow()));	
 	connect(backcoloraction, SIGNAL(triggered()), this, SLOT(SetBackground()));
 	connect(zaddaction, SIGNAL(triggered()), this, SLOT(ZscaleAdd()));
 	connect(zminuteaction, SIGNAL(triggered()), this, SLOT(ZscaleMinus()));
-	// 三视图
+	// views
 	connect(Frontviewaction, SIGNAL(triggered()), this, SLOT(setFrontView()));
 	connect(Topviewaction, SIGNAL(triggered()), this, SLOT(SetTopView()));
 	connect(Sideviewaction, SIGNAL(triggered()), this, SLOT(SetLeftView()));
@@ -489,9 +520,9 @@ void cellpara3dshow::AddToolBarConnection() //添加工具条上Action的响应�
 
 	connect(Manager_action, SIGNAL(triggered()), this, SLOT(set_switch()));
 
-	////右部工具栏按钮响应
-	connect(cellrangeaction, SIGNAL(triggered()), this, SLOT(cellrangeset()));		   //网格显示范围设置	
-	connect(propertyaction, SIGNAL(triggered()), this, SLOT(Propertyset()));		   //网格显示范围设置	
+	////right toolbars buttons events
+	connect(cellrangeaction, SIGNAL(triggered()), this, SLOT(cellrangeset()));		   //Grid Display range setting	
+	connect(propertyaction, SIGNAL(triggered()), this, SLOT(Propertyset()));		   //Grid Display range setting
 };
 void cellpara3dshow::InitLutLookup(){
 	// Make the lookup table with a preset number of colours.
@@ -524,18 +555,18 @@ void cellpara3dshow::Windowtabclose(int index)
 	 this->ui.tabWidget->removeTab(index);
 	 this->ui.tabWidget->setCurrentIndex(0);
 	 CurrentTabIndex = 0;
-	 // 除去所有的Actor 和Status
+	 // remove all Actor 和Status
 	//QUndoCommand *deleteCommand = new DeleteTabCommand(this->ui.tabWidget,index);
 	// undoStack->push(deleteCommand);
 	//this->ui.tabWidget->removeTab();	
-	// 删除数据;
+	// delete datas;
 }
 
 void cellpara3dshow::InilizationQVtkWidget(QVTKWidget *qvtkWidget, vtkSmartPointer< vtkRenderer > ren)
 {
-	// 初始化 VTK 配置 	
-	qvtkWidget->setCursor(Qt::OpenHandCursor); //设置鼠标形状	
-	// 设置ui.qvtkWidget的渲染器	
+	// Initlization VTK Setting 	
+	qvtkWidget->setCursor(Qt::OpenHandCursor); //Set Cursor style	
+	// Set ui.qvtkWidget rendering	
 	// Create the rendering window
 	vtkSmartPointer<vtkRenderWindow> renwin = vtkSmartPointer<vtkRenderWindow>::New();
 	ren->SetBackground(1, 1, 1);
@@ -550,14 +581,14 @@ void cellpara3dshow::InilizationQVtkWidget(QVTKWidget *qvtkWidget, vtkSmartPoint
 	vtkSmartPointer<vtkInteractorStyleTrackballCamera> style =
 		vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
 	qvtkWidget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(style);
-	// 面拾取
+	// Surface Pick
 	m_pvtkCellPicker = vtkSmartPointer< vtkCellPicker >::New();
 	m_pvtkCellPicker->SetTolerance(0.005);
 	m_pvtkCellPicker->SetTolerance(0.005);
 	qvtkWidget->GetInteractor()->SetPicker(m_pvtkCellPicker);
 	m_pvtkCellPicker->GetPath();
 
-	//建立回调函数--鼠标，获取坐标
+	//create callback function--Cursor，Get Press Points
 	vtkSmartPointer <vtkCallbackCommand> Press_interactor;
 	Press_interactor = vtkSmartPointer < vtkCallbackCommand >::New();
 	Press_interactor->SetCallback(MouseWheelEvent);
@@ -588,7 +619,7 @@ void cellpara3dshow::ResetView()
 			double distance = qvtkWidgetView[CurrentTabIndex].ren->GetActiveCamera()->GetDistance();
 			InitDistance = distance;
 			if (currentStage != 0){
-				//触发事件;
+				//trigger event ;
 				SetDistance(distance);
 			}
 		}
@@ -602,7 +633,7 @@ void cellpara3dshow::SetDistance(double distance){
 		double minDistance = InitDistance - InitDistance * thread_1;
 		double maxDistance = InitDistance - InitDistance * thread_2;
 		if (distance < maxDistance){
-			tempStage = 2; // 最细的
+			tempStage = 2; // The Finest
 		}
 		else if (distance < minDistance){
 			tempStage = 1; // 
@@ -642,7 +673,7 @@ void cellpara3dshow::closeMywidget(){
 	parentpointer->Widgetclose();
 }
 
-// 右部工具栏
+// left toolbars
 void cellpara3dshow::cellrangeset(){
 	if (CellValueRange.size() > 0){		
 		SearchDialog *New = new SearchDialog(FilterCellValueRange,MaxCellValueRange,SGrid.Phasemaps,query,isPropFlag);
@@ -656,34 +687,34 @@ void cellpara3dshow::cellrangeset(){
 void cellpara3dshow::UpdateCellRange(int Layer, double *Bounds, double *Value, int Type,vector<bool> PropFilter,vector<bool> SpaceFlag){	
 	bool isFlag = false;
 	int valid_cellnum = 0;
-	// 判断更新策略;
+	// judege update Policy;
 	judgeUpdate(Layer, Bounds, Value, PropFilter, SpaceFlag, isFlag);
 	clock_t t1 = clock();
-	printf("查询开始 \n");
+	printf("Query Start \n");
 	bool isSpaceFlag = print_searchInfo(PropFilter,SpaceFlag);
 	if (isFlag){
-		// 查询逻辑;
+		// Query Process;
 		/*
-			空间查询:
-			  1) root 查询;;
-			  2）查询结果进入下一层查询，直至结束；
-			  3）查询范围之外的，下一层：isActive;
-			  4）查询范围之内的，下一层：isFullActive;
-			  5）查询范围部分属于的，下一层：isPartActive;
+			Spatical Query:
+			  1) root Query;;
+			  2）Query 结果进入下一层Query，直至 Finished ；
+			  3）Query 范围之外的，下一层：isActive;
+			  4）Query 范围之内的，下一层：isFullActive;
+			  5）Query 范围部分属于的，下一层：isPartActive;
 
-			可视面绘制：
-				1）当前可视面；需要获取最底层的有效和无效网格;
-				2) 获取当前LOD层位的可视面;
+			可视Surface 绘制：
+				1）当前可视Surface ；需要获取最底层的有效和无效Grid;
+				2) 获取当前LOD层位的可视Surface ;
 				3) 绘制下一层;
 
-			属性查询:
+			property Query:
 				1) 当前层遍历；
 				2）当前层Active;
 
 
 		*/
 		/*if (Layer < 2){
-			//ResetActView(SGrid, false);  // ? 解决顶面出现问题；提高查询效率
+			//ResetActView(SGrid, false);  // ? 解决顶Surface 出现问题；提高Query效率
 		}
 		else{
 			ResetActView(SGrid, true);
@@ -692,15 +723,15 @@ void cellpara3dshow::UpdateCellRange(int Layer, double *Bounds, double *Value, i
 		searchStage = Layer;
 		switch (Type)
 		{
-		case 1: // 属性和空间同时查询;
-			// 更新查询缓存数据;
+		case 1: // Query Properties and Spaces at the same time;
+			// Update Query cache data;
 			setSpaceFilterValue(Layer, Bounds,SpaceFlag);
 			setPropertyValue(Value, Layer, PropFilter);
 			UpdateSpace(Layer, Bounds, SpaceFlag);
 			UpdateProperty(Layer, Value, PropFilter, isSpaceFlag); // 
 			break;
-			// 属性和空间查询取并集方法;
-			// 先做空间查询; 传入 isFixed 判断已经筛选;
+			// property and Spatial Query FULL OUTER JOIN ;
+			// First Spatial Query;;
 		case 2: // 
 			query.isProperty = false;
 			setSpaceFilterValue(Layer, Bounds,SpaceFlag);
@@ -726,7 +757,7 @@ void cellpara3dshow::UpdateCellRange(int Layer, double *Bounds, double *Value, i
 			}
 			*/
 			break;
-		case 3: // 只有属性查询
+		case 3: //  only property Query
 			query.isSpace = false;
 			setPropertyValue(Value, Layer, PropFilter);
 			UpdateProperty(Layer, Value, PropFilter,false);
@@ -734,16 +765,16 @@ void cellpara3dshow::UpdateCellRange(int Layer, double *Bounds, double *Value, i
 		default:
 			break;
 		};
-		// 判断查询是否为空;
-		// 更新SGrid Data 数据;
+		//  judge Query if is empty ;
+		// update SGrid Data Data ;
 		if (Layer < (int)SGrid.Phasemaps.size()){
-			setType(Layer, Tree.root, 0, SGrid, valid_cellnum); // 如果非底层查询;
+			setType(Layer, Tree.root, 0, SGrid, valid_cellnum); // if not bottom Query;
 		}
 		else{
 			get_valid_cellnum(SGrid, valid_cellnum);
 		}
 		clock_t t2 = clock();
-		printf("查询结束，有效网格数: %d,  总消耗时间 %.2f s\n", valid_cellnum,1.0*(t2 - t1) / 1000);
+		printf("Query Finished，Valid Grid number: %d,  total time spent %.2f s\n", valid_cellnum,1.0*(t2 - t1) / 1000);
 		/*for (int currentStage2 = 0; currentStage2 < Lineactor.size(); currentStage2++){
 			for (int i = 0; i < Lineactor[currentStage2].size(); i++){
 				qvtkWidgetView[this->CurrentTabIndex].ren->RemoveActor(Lineactor[currentStage2][i]);
@@ -752,12 +783,12 @@ void cellpara3dshow::UpdateCellRange(int Layer, double *Bounds, double *Value, i
 		};
 		*/
 		// clock_t t3 = clock();
-		printf("可视化开始: ");
+		printf("Visualization  Start: ");
 		clock_t t3 = clock();
 		InitDrawGrid();
 		clock_t t4 = clock();
-		printf("可视化结束:  总消耗时间 %.2f s\n ", 1.0*(t4 - t3) / 1000);
-		// 沉积相更新
+		printf("Visualization Finished :  total time spent %.2f s\n ", 1.0*(t4 - t3) / 1000);
+		// sedimentary facies update
 		if (ProperyIdx==6){
 			set_grid_prop(ProperyIdx);
 		}
@@ -766,28 +797,28 @@ void cellpara3dshow::UpdateCellRange(int Layer, double *Bounds, double *Value, i
 	}
 }
 
-// 空间查询
+//  Spatial Query
 void cellpara3dshow::UpdateSpace(int Layer, double *Bounds, vector<bool> SpaceFlag){
 	if (SpaceFlag[0] || SpaceFlag[1] || SpaceFlag[2]){
 		updateSpace(0,Layer, Tree.root, SGrid, Bounds[0], Bounds[1], Bounds[2], Bounds[3], (int)Bounds[4] - 1, (int)Bounds[5] - 1, SpaceFlag);
 	}
 }
 
-// 属性查询;
+// property Query;
 void cellpara3dshow::UpdateProperty(int Layer, double *Value, vector<bool> PropFilter,int isFixed){
-	// isFixed true: 表示取并集;
+	// isFixed true: Represents the union set;
 	int TotalFaceLayer = (int)SGrid.Phasemaps.size(); // LOD 0, LOD 2;
 	if (Layer < TotalFaceLayer){
 		for (int i = 0; i < PropFilter.size(); i++){
 			if (PropFilter[i]){
-				// 迭代查询;
+				// Iteration Query;
 				GeoPropUpdate(Layer, Tree.root, SGrid, Value[2 * i], Value[2 * i + 1], i + 1, isFixed);
 				isFixed = isFixed + 1;
 			}
 		}
 	}
 	else{
-		// 直接查询底部节点;节省Tree数据存储
+		// Direct Query bottom node; Save Tree data storage
 		for (int i = 0; i < PropFilter.size(); i++){
 			if (PropFilter[i]){
 				GeoFilter(SGrid, Value[2 * i], Value[2 * i + 1], i + 1, isFixed);
@@ -829,13 +860,13 @@ void cellpara3dshow::UpdateProperty(int Layer, double *Value, vector<bool> PropF
 void cellpara3dshow::judgeUpdate(int Layer, double *Bounds, double *Value, vector<bool> &PropFilter, vector<bool> &SpaceFlag, bool &isFlag){
 	if (query.LOD != Layer){
 		query.LOD = Layer;
-		isFlag = true; // 保存数据筛选条件;
+		isFlag = true; // Save data filtering Condition;
 		if (query.LOD == (int)SGrid.Phasemaps.size()){
-			ResetActView(SGrid, true); //底层由于树索引问题采取Reset 方式; 
+			ResetActView(SGrid, true); //Reset visible View; 
 			//return;
 		}
 	}
-	// 判断Previous 是否有筛选; 然后;筛选之后判断是否为边界之外;
+	// judege if Previous step is filter then determine if it is outside the boundary;
 	for (int i = 0; i < SpaceFlag.size(); i++){
 		if (SpaceFlag[i]){
 			USpaceFlag[Layer][i] = true;
@@ -973,7 +1004,7 @@ void cellpara3dshow::SetProperty(bool *flag){
 		}
 	}
 	int TotalMapLayer = (int)SGrid.Phasemaps.size() + 1;
-	//初始化;
+	//Initlization ;
 	for (int i = 0; i < TotalMapLayer; i++){
 		UPropFilter.push_back(tempProp);
 	}
@@ -1014,10 +1045,7 @@ void cellpara3dshow::set_grid_prop(int idx){
 	}
 	// scalarBar->SetTitle(keywords[idx].toLocal8Bit().data());
 	// SetNumberOfLabels;
-	// 连续值设定;
 	if (idx == 6){
-
-		// 视需求再修改;
 		scalarBar->SetNumberOfLabels(8);
 		QVector<QColor> col;
 
@@ -1027,8 +1055,8 @@ void cellpara3dshow::set_grid_prop(int idx){
 		col.append(QColor(0, 255, 3, 255));
 		col.append(QColor(255, 255, 3, 255));
 		col.append(QColor(255, 160, 7, 255));
-		col.append(QColor(255, 0, 255, 255));  //默认色卡体系
-		col.append(QColor(255, 0, 0, 255));  //默认色卡体系
+		col.append(QColor(255, 0, 255, 255));  //default color bar
+		col.append(QColor(255, 0, 0, 255));  //default color bar
 
 		vtkSmartPointer<vtkColorTransferFunction> lut = vtkSmartPointer<vtkColorTransferFunction>::New();
 		for (int i = 0; i < col.length(); i++)
@@ -1175,7 +1203,7 @@ void cellpara3dshow::SetRightView(){
 	upsurfaceshow(3);
 }
 void cellpara3dshow::set_switch(){
-	if (! isSwitch) { // 之前单一LOD 
+	if (! isSwitch) { //previous LOD 
 		isSwitch = !isSwitch;
 		ResetView();
 	}
@@ -1195,34 +1223,34 @@ void cellpara3dshow::upsurfaceshow(int type)
 	x = gridCenter[0]; y = gridCenter[1]; z = gridCenter[2];
 	switch (type){
 	case 0:
-		dy = 1;// 上视图;
+		dy = 1;// top view ;
 		z = gridCenter[2] + Lxyz;
 		break;
 	case 1:
 		z = gridCenter[2] - Lxyz;
-		dy = -1; // 下视图;
+		dy = -1; // bottom view ;
 		break;
 	case 2:
 		x = gridCenter[0] - Lxyz;
-		dz = 1; // 左视图;
+		dz = 1; // left view;
 		break;
 	case 3:
 		x = gridCenter[0] +  Lxyz;
-		dz = -1; // 右视图;
+		dz = -1; // right view
 		break;
 	case 4:
 		y = gridCenter[1] + Lxyz;
-		dx = 1; // 正视图;
+		dx = 1; // front view ;
 		break;
 	case 5:
 		y = gridCenter[1] -  Lxyz;
-		dx = -1; // 后视图;
+		dx = -1; // back view;
 		break;
 	default:
 		break;
 	}
 	qvtkWidgetView[this->CurrentTabIndex].ren->GetActiveCamera()->SetPosition(x,y,z);
-	qvtkWidgetView[this->CurrentTabIndex].ren->GetActiveCamera()->SetViewUp(dx, dy, dz); // 上视图;
+	qvtkWidgetView[this->CurrentTabIndex].ren->GetActiveCamera()->SetViewUp(dx, dy, dz); // top view;
 	qvtkWidgetView[this->CurrentTabIndex].ren->UpdateLightsGeometryToFollowCamera();
 	qvtkWidgetView[this->CurrentTabIndex].ren->ResetCameraClippingRange();
 	qvtkWidgetView[CurrentTabIndex].qvtkwidget->GetRenderWindow()->Render();
@@ -1237,7 +1265,7 @@ void cellpara3dshow::get_valid_cellnum(StrucGrid &SGrid, int &valid_cellnum){
 			int idx_j = j*nx;
 			for (int i = 0; i < nx; i++){
 				int idx = idx_j + idx_k + i;
-				// isFixed 取并集; 
+				// isFixed FULL OUTER JOIN; 
 				if (SGrid.ACTNUM[idx] ){
 					if (SGrid.CPGCells[idx].is_act){
 						valid_cellnum = valid_cellnum + 1;
@@ -1252,16 +1280,16 @@ bool cellpara3dshow::print_searchInfo(vector<bool> PropFilter, vector<bool> Spac
 	QString list = "x y z PORO PERMEABILITY SOIL FACIES BULKVOLUME DZMTRXV";
 	QStringList keywords = list.split(" ");
 	bool isSpaceFlag = false;
-	printf("查询条件:\n"); // 输出层次;
+	printf("Query Condition:\n"); // output Lod;
 	for (int i = 0; i < SpaceFlag.size(); i++){
 		if (SpaceFlag[i]){
 			isSpaceFlag = true;
-			printf("\t 空间查询: %s \n", keywords[i].toStdString().data() );
+			printf("\t Spactial Query: %s \n", keywords[i].toStdString().data() );
 		}
 	}
 	for (int i = 0; i < PropFilter.size(); i++){
 		if (PropFilter[i]){
-			printf("\t 语义查询: %s \n", keywords[i + 3].toStdString().data());
+			printf("\t semantic Query: %s \n", keywords[i + 3].toStdString().data());
 		}
 	}
 	return isSpaceFlag;

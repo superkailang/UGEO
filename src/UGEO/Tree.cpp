@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     Tree.cpp														 *
+*  @brief    Tree Struct For mutil_scale Grid								 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  Tree Struct For mutil_scale Grid 						 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include"Tree.h"
 #include"IJKGrid.h"
 #include<queue>
@@ -17,7 +47,7 @@ namespace UMSM
 		//int BottomLayer = phasemaps[0].BottomLayers.back();		
 		//root->NodeData.TopLayer = TopLayer;
 		//root->NodeData.BottomLayer = BottomLayer;		
-		//创建树
+		//construct Tree 
 		//void MyTree::createTree(TreeNode * &node, intArray TopLayers, intArray BottomLayers, NodeDatas nodeDatas, StrucGrid SGridData)		
 		int TopIndex = -1, BottomIndex = -2;
 		int NumberLayers = (int)BottomLayers.size();
@@ -39,7 +69,7 @@ namespace UMSM
 	
 	void MyTree::Merge(int TopLayer, int BottomLayer, StrucGrid SGridData, nodeData NoteData, int NX, int NY, CPGNode &node)
 	{
-		//	// 合并 X,Y;
+		//	// Merge X,Y;
 		double BULKVOLUME = 0, DZMTRXV = 0, PORO = 0, PERMEABILITY = 0, SOIL = 0;
 		int dd[4];
 		int temp = NoteData.i + NoteData.j*NX;
@@ -82,7 +112,7 @@ namespace UMSM
 			SOIL = SOIL / NG;
 			node.SOIL = SOIL;
 		}
-		//生成粗化的网格
+		//Generate a Coarse  grid
 		node.ACTNUM = 1;
 		for (int m = 0; m < 4; m++)
 		{
@@ -93,7 +123,7 @@ namespace UMSM
 		}
 	}
 	
-	////求树的深度
+	////get Tree Depth
 	int MyTree::depth(TreeNode * &node)
 	{
 		if (flag)
@@ -173,195 +203,5 @@ namespace UMSM
 				preOrder(level + 1, depth, note->childNotes[i]);
 			}
 		}
-	}		
-	////计算单位长度，为查找点做准备
-	//int cal(int num)
-	//{
-	//	int result = 1;
-	//	if (1 == num)
-	//		result = 1;
-	//	else
-	//	{
-	//		for (int i = 1; i < num; i++)
-	//			result = 2 * result;
-	//	}
-	//	return result;
-	//}
-	//
-	////查找点
-	//int maxdepth = 0;
-	//int times = 0;
-	//static double xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMin = 0, zMax = 0;
-	//int tmaxdepth = 0;
-	//double txm = 1, tym = 1, tzm = 1;
-	//
-	//template<class T>
-	//void find(OctreeNode<T> *& p, double x, double y, double z)
-	//{
-	//	double xMind = (p->xMax - p->xMin) / 2;
-	//	double yMind = (p->yMax - p->yMin) / 2;
-	//	double zMind = (p->yMax - p->yMin) / 2;
-	//	times++;
-	//	if (x > xMax || x<xMin || y>yMax || y<yMin || z>zMax || z < zMin)
-	//	{
-	//		cout << "该点不在场景中！" << endl;
-	//		return;
-	//	}
-	//	if (x <= p->xMin + txm && x >= p->xMax - txm && y <= p->yMin + tym &&
-	//		y >= p->yMax - tym && z <= p->zMin + tzm && z >= p->zMax - tzm)
-	//	{
-	//		cout << endl << "找到该点！" << "该点位于" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << "节点内！" << endl;
-	//		cout << "共经过" << times << "次递归！" << endl;
-	//	}
-	//	else if (x < (p->xMax - xMind) && y < (p->yMax - yMind) && z < (p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->bottom_left_back, x, y, z);
-	//	}
-	//	else if (x < (p->xMax - xMind) && y<(p->yMax - yMind) && z>(p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->top_left_back, x, y, z);
-	//	}
-	//	else if (x >(p->xMax - xMind) && y < (p->yMax - yMind) && z < (p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->bottom_right_back, x, y, z);
-	//	}
-	//	else if (x >(p->xMax - xMind) && y<(p->yMax - yMind) && z>(p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->top_right_back, x, y, z);
-	//	}
-	//	else if (x<(p->xMax - xMind) && y>(p->yMax - yMind) && z < (p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->bottom_left_front, x, y, z);
-	//	}
-	//	else if (x<(p->xMax - xMind) && y>(p->yMax - yMind) && z >(p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->top_left_front, x, y, z);
-	//	}
-	//	else if (x > (p->xMax - xMind) && y > (p->yMax - yMind) && z < (p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->bottom_right_front, x, y, z);
-	//	}
-	//	else if (x >(p->xMax - xMind) && y > (p->yMax - yMind) && z > (p->zMax - zMind))
-	//	{
-	//		cout << "当前经过节点坐标：" << endl;
-	//		cout << " xMin: " << p->xMin << " xMax: " << p->xMax;
-	//		cout << " yMin: " << p->yMin << " yMax: " << p->yMax;
-	//		cout << " zMin: " << p->zMin << " zMax: " << p->zMax;
-	//		cout << endl;
-	//		find(p->top_right_front, x, y, z);
-	//	}
-	//}
-	//
-	//
-	////main函数
-	//int main()
-	//{
-	//	OctreeNode<double> * rootNode = NULL;
-	//	int choiced = 0;
-	//	while (true)
-	//	{
-	//		system("cls");
-	//		cout << "请选择操作：\n";
-	//		cout << "1.创建八叉树 2.先序遍历八叉树\n";
-	//		cout << "3.查看树深度 4.查找节点   \n";
-	//		cout << "0.退出\n\n";
-	//		cin >> choiced;
-	//		if (choiced == 0)
-	//		{
-	//			return 0;
-	//		}
-	//		else if (choiced == 1)
-	//		{
-	//			system("cls");
-	//			cout << "请输入最大递归深度：" << endl;
-	//			cin >> maxdepth;
-	//			cout << "请输入外包盒坐标，顺序如下：xMin,xMax,yMin,yMax,zMin,zMax" << endl;
-	//			cin >> xMin >> xMax >> yMin >> yMax >> zMin >> zMax;
-	//			if (maxdepth >= 0 || xMax > xMin || yMax > yMin || zMax > zMin || xMin > 0 || yMin > 0 || zMin > 0)
-	//			{
-	//				tmaxdepth = cal(maxdepth);
-	//				txm = (xMax - xMin) / tmaxdepth;
-	//				tym = (yMax - yMin) / tmaxdepth;
-	//				tzm = (zMax - zMin) / tmaxdepth;
-	//				createOctree(rootNode, maxdepth, xMin, xMax, yMin, yMax, zMin, zMax);
-	//			}
-	//			else
-	//			{
-	//				cout << "输入错误！";
-	//				return 0;
-	//			}
-	//		}
-	//		else if (choiced == 2)
-	//		{
-	//			system("cls");
-	//			cout << "先序遍历八叉树结果：\n";
-	//			i = 1;
-	//			preOrder(rootNode);
-	//			cout << endl;
-	//			system("pause");
-	//		}
-	//		else if (choiced == 3)
-	//		{
-	//			system("cls");
-	//			int dep = depth(rootNode);
-	//			cout << "此八叉树的深度为" << dep + 1 << endl;
-	//			system("pause");
-	//		}
-	//		else if (choiced == 4)
-	//		{
-	//			system("cls");
-	//			cout << "请输入您希望查找的点的坐标，顺序如下：x,y,z\n";
-	//			double x, y, z;
-	//			cin >> x >> y >> z;
-	//			times = 0;
-	//			cout << endl << "开始搜寻该点……" << endl;
-	//			find(rootNode, x, y, z);
-	//			system("pause");
-	//		}
-	//		else
-	//		{
-	//			system("cls");
-	//			cout << "\n\n错误选择！\n";
-	//			system("pause");
-	//		}
-	//	}
+	}
 };

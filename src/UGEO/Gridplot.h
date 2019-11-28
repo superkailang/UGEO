@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     Girdplot.h														 *
+*  @brief    3D Grid Plot Function 											 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  3d Gird plot Function									 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #ifndef GRIDPLOT_h__
 #define GRIDPLOT_h__
 #include"BaseFunction.h"
@@ -90,7 +120,7 @@ namespace UMSM {
 	void getKrange(int kmin, int kmax, PhaseMap Layers, int &k2, int &k1);
 
 
-	// 迭代查询空间; 
+	// Iterative spatial query 
 	void updateSpace(int depth, int Layer, TreeNode *Nodes, StrucGrid &SGrid, double xmin, double xmax, double ymin, double ymax, int kmin, int kmax, vector<bool> SpaceFlag);
 	void UpdateSpaceNodes(int depth, int Layer, int TotalLayer, TreeNode *Nodes, StrucGrid &SGrid, double xmin, double xmax, double ymin, double ymax, int *kmin, int *kmax, vector<bool> SpaceFlag);
 	bool SetTreeNode(int depth, int Layer, int TotalLayer, double xmin, double xmax, double ymin, double ymax, int kmin, int kmax, BGGindex id_k, TreeNode *Nodes, vector<bool> SpaceFlag);
@@ -99,12 +129,12 @@ namespace UMSM {
 	void UpdateSpaceNode(StrucGrid &SGrid, int depth, int Layer, int TotalLayer, TreeNode *Nodes, bool isValue);
 	void UpdateGridNode(TreeNode *Nodes, bool isValue);
 
-	// 迭代查询属性;
-	void SetGeoNodes(int type, double valueMin, double valuemax, TreeNode *Nodes, bool isFixed);//Node 单个筛选;
-	void SetGridProp(int idx, StrucGrid &SGrid, double valueMin, double valuemax, int type); //Grid 单个网格筛选;
-	void GeoFilter(StrucGrid &SGrid, double valueMin, double valuemax, int type, bool isFixed); // Grid 属性查询;
+	// Iterative properties query;
+	void SetGeoNodes(int type, double valueMin, double valuemax, TreeNode *Nodes, bool isFixed);//Node Single Node Filter;
+	void SetGridProp(int idx, StrucGrid &SGrid, double valueMin, double valuemax, int type); //Grid Single Grid Filter;
+	void GeoFilter(StrucGrid &SGrid, double valueMin, double valuemax, int type, bool isFixed); // Grid properties Filter;
 	void GeoFilter(int depth, int Layer, TreeNode *Nodes, StrucGrid &SGrid, double valueMin, double valuemax, int type, bool isFixed);
-	void GeoPropUpdate(int Layer, TreeNode *Nodes, StrucGrid &SGrid, double valueMin, double valuemax, int type, bool isFixed);// Tree nodes 迭代筛选;
+	void GeoPropUpdate(int Layer, TreeNode *Nodes, StrucGrid &SGrid, double valueMin, double valuemax, int type, bool isFixed);// Tree nodes Iteration Filter;
 
 
 	void getLayer2(intArray TopLayers, intArray BottomLayers, int TopIndex, int BottomIndex, int &iIndex, int &j);

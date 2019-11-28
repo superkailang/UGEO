@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     Gridstruct.h													 *
+*  @brief    Grid Struct													 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  Grid Struct											 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #ifndef STRUCTS__
 #define STRUCTS__
 #include <iostream>
@@ -13,14 +43,16 @@
 #include"Constants.h"
 
 using namespace std;
+
 namespace UMSM{
 #define DISALLOW_COPY_AND_ASSIGN(TypeName) \
 	TypeName(const TypeName&); \
 	void operator=(const TypeName&)
 
-	typedef vector<int> intArray;//定义int类的vector容器  
-	typedef vector<double> realArray;//定义double类的vector容器
+	typedef vector<int> intArray; // Define the vector container for int 
+	typedef vector<double> realArray; // Define the vector container for double 
 
+	// 3d Point definition
 	struct point
 	{
 		double x, y, z;
@@ -30,9 +62,9 @@ namespace UMSM{
 			x = _x; y = _y; z = _z;
 		};
 	};
-	typedef vector<point> PointArray;//定义点类的vector容器
+	typedef vector<point> PointArray;//Define the vector container points
 
-	struct WellPath  //定义井眼轨迹
+	struct WellPath  // Define borehole trajectory
 	{
 		char wellname[MAX_STRING_LEN];
 		realArray MD;
@@ -46,7 +78,7 @@ namespace UMSM{
 	{
 		CPCell() :is_act(true) {};
 
-		point corner[8]; // 核心
+		point corner[8]; // corner points
 		point facec[6];
 		point blockc;
 		bool is_act;
@@ -54,12 +86,12 @@ namespace UMSM{
 		double Gen_GeomCenter(); // return volume
 	};
 
-	struct Layer
+	struct Layer // define Layer
 	{
 		int TopLayer;
 		int BottomLayer;
 	};
-	struct PhaseMap
+	struct PhaseMap // define map for sedimentary facies
 	{
 		intArray TopLayers;
 		intArray BottomLayers;
@@ -81,7 +113,7 @@ namespace UMSM{
 		intArray Bottom;
 	};
 
-	struct BGGindex{
+	struct BGGindex{   // define Grid Index
 		int i;
 		int j;
 		int k;
@@ -99,17 +131,16 @@ namespace UMSM{
 
 	struct CPGNode
 	{
-		// 对应原始数据
+		// (i,j,k) -> original Grid
 		int IIndex;
 		int JIndex;
 		int KIndex;
 		int dx, dy, dz;
-		BGGindex BGindex; // ?
+		BGGindex BGindex;
 		NeightBor neightbor;
 		bool isFine;
 		bool isActive=true;
 		bool isChange = false;
-		// 保存现在数据
 		CPCell CPGCells;
 		int ACTNUM;
 		double BULKVOLUME;
@@ -125,7 +156,7 @@ namespace UMSM{
 		};
 	};
 
-	struct nodeData
+	struct nodeData  // nodeData for Structed Tree node
 	{
 		int i;
 		int j;
@@ -170,23 +201,21 @@ namespace UMSM{
 		};
 	};
 
-	// 三维绘制
+	// 3D sketching For Grid Face
 	struct FaceNode
 	{
-		// 对应原始数据
 		point Point[4];
-		BGGindex index;
-		// 保存现在数据		
-		int ACTNUM;
-		double BULKVOLUME;
-		double DZMTRXV;
-		double PORO;
-		double PERMEABILITY;
-		double SOIL;
-		int FACIES;
+		BGGindex index;		
+		int ACTNUM;           // 0 is inactive, 1 is active Grid
+		double BULKVOLUME;	  // BULK VOLUME
+		double DZMTRXV;		  // 
+		double PORO;		  // Porosity 
+		double PERMEABILITY;  // Pemearbility 
+		double SOIL;		  // Oil Saturation
+		int FACIES;			  // sedimentary Facies
 	};
 
-	// 处理间隙
+	// Pillar index of Grid
 	struct Pillarindex{
 		int i;
 		int j;

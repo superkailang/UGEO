@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     mywidget.h														 *
+*  @brief    Class QWidget													 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  QWidget For UI Layout									 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #ifndef MYWIDGET_H
 #define MYWIDGET_H
 
@@ -19,7 +49,7 @@ public:
 	bool iscloseenable = true;
 	bool isclose = true;
 private:
-	int vtheight = 20.0;  //顶部标题高度
+	int vtheight = 20.0;  //height of top title
     QLabel* LeftFrame;
     QLabel* RightFrame;
     QLabel* ButtonFrame;
@@ -44,14 +74,14 @@ private:
 	void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 	void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
 	void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
-	int setCursorStyle(const QPoint& curPoint);    // 当前位置设置鼠标样式
+	int setCursorStyle(const QPoint& curPoint);    // set Cursor Style
 
-	QPoint m_MousePressPos;				    // 鼠标点击位置  
-	QPoint m_MouseMovePos;				    // 鼠标移动位置  
-	bool   m_bMousePressed = false;		   // 鼠标是否按下  
-	int    m_nMouseResize ;				   // 鼠标设置大小  
-	bool   m_bMouseResizePressed = false;    // 设置大小的按下  
-	QPoint m_ResizePressPos;			   // 设置大小鼠标按下的点
+	QPoint m_MousePressPos;				    // Position of Mouse press  
+	QPoint m_MouseMovePos;				    // Position of Mouse move  
+	bool   m_bMousePressed = false;		   //  True: Mouse Press, False:else   
+	int    m_nMouseResize ;				   // Mouse Size  
+	bool   m_bMouseResizePressed = false;     
+	QPoint m_ResizePressPos;			   
 
 	void resetgrid(QWidget* frm, double fx, double fy, int index);
 
@@ -75,8 +105,8 @@ private:
 	bool ismaxsize=false;
 	int sizemode = 2; //1-- min 2--mid 3-max
 
-	int hwidth = 1.0;     //左右边框宽度	
-	int vbheight = 1.0;   //底部边框高度
+	int hwidth = 1.0;     //Left and right border margin	
+	int vbheight = 1.0;   //bottom border margin
 
 	QSize MidSize;
 	QPoint frmpos;
@@ -89,7 +119,7 @@ private:
 protected :
 	void paintEvent(QPaintEvent * event);
 	void mouseDoubleClickEvent(QMouseEvent* e);
-	bool eventFilter(QObject *object, QEvent *event);//事件过滤器
+	bool eventFilter(QObject *object, QEvent *event);//event Filter
 private slots:
 	void Widgetresize(double fx, double fy);
 	void ScreenChange();

@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     SearchDialog.cpp												 *
+*  @brief    QWidget Dialog For Grid  Search								 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  QWidget Dialog For Grid Search 						 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include <QtWidgets>
 #include"SerachDialog.h"
 
@@ -83,11 +113,11 @@ void TxtTab::SetTxt(){
 }
 void TxtTab::InitLization(QStringList LayerItem){
 	
-	Labelfont.setFamily("宋体"); Labelfont.setBold(true);Labelfont.setPointSize(12);
+	Labelfont.setFamily("SimSun"); Labelfont.setBold(true);Labelfont.setPointSize(12);
 	QStringList Checklist;
-	Checklist.push_back(QString::fromLocal8Bit("细节层次")); Checklist.push_back(QString::fromLocal8Bit("空间"));
-	SheetLabelList.append(QString::fromLocal8Bit("地层")); SheetLabelList.append(QString::fromLocal8Bit("孔隙度")); SheetLabelList.append(QString::fromLocal8Bit("渗透率"));
-	SheetLabelList.append(QString::fromLocal8Bit("饱和度")); SheetLabelList.append(QString::fromLocal8Bit("沉积相"));
+	Checklist.push_back(QString::fromLocal8Bit("LOD")); Checklist.push_back(QString::fromLocal8Bit("Space"));
+	SheetLabelList.append(QString::fromLocal8Bit("Layers")); SheetLabelList.append(QString::fromLocal8Bit("Porosity")); SheetLabelList.append(QString::fromLocal8Bit("Permeability"));
+	SheetLabelList.append(QString::fromLocal8Bit("Saturation")); SheetLabelList.append(QString::fromLocal8Bit("Facies "));
 	SheetLabelList.append("X"); SheetLabelList.append("y"); SheetLabelList.append("k");
 	SheetLabelNum = (int)SheetLabelList.size();
 	ACheckBoxNum = 2;
@@ -164,16 +194,16 @@ bool TxtTab::JudgeInput(){
 		double minvalue = SheetLineEdits[2 * i]->text().trimmed().toDouble();
 		double maxvalue = SheetLineEdits[2 * i + 1]->text().trimmed().toDouble();
 		if (maxvalue < minvalue){
-			QMessageBox::warning(NULL, QString::fromLocal8Bit("输入错误"), SheetLabelList[i] + QString::fromLocal8Bit(" 最小值大于最大值"), QMessageBox::Yes, QMessageBox::Yes);
+			QMessageBox::warning(NULL, QString::fromLocal8Bit("Input Error"), SheetLabelList[i] + QString::fromLocal8Bit(" Minimum is greater than maximum"), QMessageBox::Yes, QMessageBox::Yes);
 			return false;
 		}
 		if (minvalue < (MaxValueRange[currentIdx][i + idx].minValue - miniValue)){
-			QMessageBox::warning(NULL, QString::fromLocal8Bit("输入错误"), SheetLabelList[i] + QString::fromLocal8Bit(" 最小值为") + QString::number(MaxValueRange[currentIdx][i + idx].minValue), QMessageBox::Yes, QMessageBox::Yes);
+			QMessageBox::warning(NULL, QString::fromLocal8Bit("Input Error"), SheetLabelList[i] + QString::fromLocal8Bit(" Minimum value") + QString::number(MaxValueRange[currentIdx][i + idx].minValue), QMessageBox::Yes, QMessageBox::Yes);
 			SheetLineEdits[2 * i]->setText(QString::number(MaxValueRange[currentIdx][i + idx].minValue));
 			return false;
 		}
 		if (maxvalue >(MaxValueRange[currentIdx][i + idx].maxValue + miniValue)){
-			QMessageBox::warning(NULL, QString::fromLocal8Bit("输入错误"), SheetLabelList[i] + QString::fromLocal8Bit(" 最大值为") + QString::number(MaxValueRange[currentIdx][i + idx].maxValue), QMessageBox::Yes, QMessageBox::Yes);
+			QMessageBox::warning(NULL, QString::fromLocal8Bit("Input Error"), SheetLabelList[i] + QString::fromLocal8Bit(" Maximum value") + QString::number(MaxValueRange[currentIdx][i + idx].maxValue), QMessageBox::Yes, QMessageBox::Yes);
 			SheetLineEdits[2 * i + 1]->setText(QString::number(MaxValueRange[currentIdx][i + idx].maxValue)); 
 			return false;
 		}
@@ -184,18 +214,18 @@ bool TxtTab::JudgeInput(){
 		double maxvalue = SheetLineEdits[2 * i + 1]->text().trimmed().toDouble();
 
 		if (maxvalue < minvalue){
-			QMessageBox::warning(NULL, QString::fromLocal8Bit("输入错误"), SheetLabelList[i] + QString::fromLocal8Bit(" 最小值大于最大值"), QMessageBox::Yes, QMessageBox::Yes);
+			QMessageBox::warning(NULL, QString::fromLocal8Bit("Input Error"), SheetLabelList[i] + QString::fromLocal8Bit(" Minimum is greater than maximum"), QMessageBox::Yes, QMessageBox::Yes);
 			return false;
 		}
 		if (minvalue < (MaxValueRange[currentIdx][j].minValue - miniValue)){
-			QMessageBox::warning(NULL, QString::fromLocal8Bit("输入错误"), SheetLabelList[i] + QString::fromLocal8Bit(" 最小值为") + QString::number(MaxValueRange[currentIdx][j].minValue), QMessageBox::Yes, QMessageBox::Yes);
+			QMessageBox::warning(NULL, QString::fromLocal8Bit("Input Error"), SheetLabelList[i] + QString::fromLocal8Bit(" Minimum value") + QString::number(MaxValueRange[currentIdx][j].minValue), QMessageBox::Yes, QMessageBox::Yes);
 
 			SheetLineEdits[2 * i]->setText(QString::number(MaxValueRange[currentIdx][j].minValue));
 
 			return false;
 		}
 		if (maxvalue >(MaxValueRange[currentIdx][j].maxValue + miniValue)){
-			QMessageBox::warning(NULL, QString::fromLocal8Bit("输入错误"), SheetLabelList[i] + QString::fromLocal8Bit(" 最大值为") + QString::number(MaxValueRange[currentIdx][j].maxValue), QMessageBox::Yes, QMessageBox::Yes);
+			QMessageBox::warning(NULL, QString::fromLocal8Bit("Input Error"), SheetLabelList[i] + QString::fromLocal8Bit(" Maximum value") + QString::number(MaxValueRange[currentIdx][j].maxValue), QMessageBox::Yes, QMessageBox::Yes);
 			SheetLineEdits[2 * i + 1]->setText(QString::number(MaxValueRange[currentIdx][j].maxValue));
 			return false;
 		}
@@ -287,7 +317,7 @@ void TxtTab::OnLineChange(const QString &str){
 	}
 }
 
-//  CellValueRange 当前查询条件 // 限制范围MaxValueRange
+//  CellValueRange Current Query Condition // Constained Range -> MaxValueRange
 SearchDialog::SearchDialog(vector<vector<CellRange>> CellValueRange, vector<vector<CellRange>> MaxValueRange, vector<PhaseMap> Phase, queryState query, bool *isPropFlag,QWidget *parent)
 : QWidget(parent)
 {	
@@ -298,7 +328,7 @@ SearchDialog::SearchDialog(vector<vector<CellRange>> CellValueRange, vector<vect
 	LayerItem.push_back(QString::fromLocal8Bit("LOD2"));	
 	LayerItem.push_back(QString::fromLocal8Bit("LOD3"));
 	txtTab = new TxtTab(LayerItem, CellValueRange, MaxValueRange, Phase, query, isPropFlag);
-	tabWidget->addTab(txtTab, QString::fromLocal8Bit("查询"));
+	tabWidget->addTab(txtTab, QString::fromLocal8Bit("Query"));
 	tabWidget->setFont(Labelfont);
 
 	TopLeftLayout = new QVBoxLayout;	
@@ -306,7 +336,7 @@ SearchDialog::SearchDialog(vector<vector<CellRange>> CellValueRange, vector<vect
 	TopLeftLayout->addWidget(buttonBox);
 	TopLeftLayout->setSpacing(20);
 	setLayout(TopLeftLayout);	
-	setWindowTitle(QString::fromLocal8Bit("查询"));
+	setWindowTitle(QString::fromLocal8Bit("Query"));
 
 }
 SearchDialog::~SearchDialog()
@@ -323,9 +353,9 @@ SearchDialog::~SearchDialog()
 	printf(" SearchDialog 5 \n");
 }
 void SearchDialog::Initlization(){
-	Labelfont.setFamily("宋体"); Labelfont.setBold(true); Labelfont.setPointSize(12);
-	ButtonStringList.push_back(QString::fromLocal8Bit("确定"));
-	ButtonStringList.push_back(QString::fromLocal8Bit("取消"));
+	Labelfont.setFamily("SimSun"); Labelfont.setBold(true); Labelfont.setPointSize(12);
+	ButtonStringList.push_back(QString::fromLocal8Bit("OK"));
+	ButtonStringList.push_back(QString::fromLocal8Bit("No"));
 	ButtomNum = (int)ButtonStringList.size();
 	Buttons = new QPushButton*[ButtomNum];
 	buttonBox = new QDialogButtonBox(Qt::Horizontal);
@@ -353,15 +383,15 @@ void SearchDialog::submit()
 		TempFlag1 = txtTab->GetSpaceBounds(Bounds, SpaceFilter);
 		Flag2 = txtTab->GetFilterValue(LayerIndex, Value, FilterFlag);
 		if (TempFlag1 && Flag2){
-			cps->UpdateCellRange(LayerIndex, Bounds, Value, 1, FilterFlag, SpaceFilter); //空间和语义约束;
+			cps->UpdateCellRange(LayerIndex, Bounds, Value, 1, FilterFlag, SpaceFilter); //Spatial and semantic constraints;
 		}
 		else
 		{
 			if (TempFlag1){
-				cps->UpdateCellRange(LayerIndex, Bounds, Value, 2, FilterFlag, SpaceFilter); //空间约束
+				cps->UpdateCellRange(LayerIndex, Bounds, Value, 2, FilterFlag, SpaceFilter); //Spatial constraints
 			}
 			if (Flag2){
-				cps->UpdateCellRange(LayerIndex, Bounds, Value, 3, FilterFlag, SpaceFilter); // 语义约束;
+				cps->UpdateCellRange(LayerIndex, Bounds, Value, 3, FilterFlag, SpaceFilter); // Semantic constraints;
 			}
 		}
 		close();

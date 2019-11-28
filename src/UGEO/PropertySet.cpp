@@ -1,3 +1,33 @@
+/*****************************************************************************
+*  This program is free software; you can redistribute it and/or modify      *
+*  it under the terms of the GNU General Public License version 3 as         *
+*  published by the Free Software Foundation.                                *
+*                                                                            *
+*  You should have received a copy of the GNU General Public License         *
+*  along with OST. If not, see <http://www.gnu.org/licenses/>.               *
+*                                                                            *
+*  Unless required by applicable law or agreed to in writing, software       *
+*  distributed under the License is distributed on an "AS IS" BASIS,         *
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  *
+*  See the License for the specific language governing permissions and       *
+*  limitations under the License.                                            *
+*                                                                            *
+*  @file     PropertySet.cpp												 *
+*  @brief    QWidget Dialog For Property selection							 *
+*  Details.                                                                  *
+*                                                                            *
+*  @author   kailanghuang                                                    *
+*  @email    kailanghuang@pku.edu.cn                                         *
+*  @version  2.0.0.1		                                                 *
+*  @date     2018/01, 2019/1												 *
+*  @license  GNU General Public License (GPL)                                *
+*                                                                            *
+*----------------------------------------------------------------------------*
+*  Remark         :  QWidget Dialog For Property selection					 *
+*----------------------------------------------------------------------------*
+*                                                                            *
+*****************************************************************************/
+
 #include <QtWidgets>
 #include"PropertySet.h"
 
@@ -7,10 +37,10 @@ PropertySet::PropertySet(QStringList LayerItem, int idx, QWidget *parent)
 	InitLization(LayerItem,idx);
 }
 void PropertySet::InitLization(QStringList LayerItem, int idx){
-	Labelfont.setFamily("宋体");
+	Labelfont.setFamily("SimSun");  // Font Family
 	Labelfont.setBold(true);
 	Labelfont.setPointSize(12);
-	SheetLabelList.append(QString::fromLocal8Bit("属性")); 
+	SheetLabelList.append(QString::fromLocal8Bit("Property")); 
 	gridLayout = new QGridLayout;
 	SheetLabelNum = 1;
 	SheetLabels = new QLabel*[SheetLabelNum];
@@ -31,8 +61,8 @@ void PropertySet::InitLization(QStringList LayerItem, int idx){
 		gridLayout->addWidget(SheetLabels[i], i + 1, Jindex, 1, 1, Qt::AlignTop);			
 		gridLayout->addWidget(UnitBox, i + 1, Jindex + 1, 1, 1, Qt::AlignTop);		
 	}				
-	ButtonStringList.push_back(QString::fromLocal8Bit("确定"));
-	ButtonStringList.push_back(QString::fromLocal8Bit("取消"));
+	ButtonStringList.push_back(QString::fromLocal8Bit("OK"));
+	ButtonStringList.push_back(QString::fromLocal8Bit("No"));
 	ButtomNum = (int)ButtonStringList.size();
 	Buttons = new QPushButton*[ButtomNum];
 	buttonBox = new QDialogButtonBox(Qt::Horizontal);

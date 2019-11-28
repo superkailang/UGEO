@@ -1,0 +1,5 @@
+cmake-3.6.0-win64-x64.zip filter=lfs diff=lfs merge=lfs -text
+VTK-7.0.0.zip filter=lfs diff=lfs merge=lfs -text
+. filter=lfs diff=lfs merge=lfs -text
+qt-opensource-windows-x86-msvc2013_64-5.5.0.exe filter=lfs diff=lfs merge=lfs -text
+qt-vs-addin-1.2.4-opensource.exe filter=lfs diff=lfs merge=lfs -text

@@ -92,10 +92,10 @@ enum Solutionenum{
 	Solution_XMFVP = 37, Solution_YMFVP = 38, Solution_AQUSTREAM = 39, Solution_Nkey = 39,
 };
 enum tagCursorCtrlStyle{
-	eCursorNormal = 0,  //普通鼠标
-	eCursorHor = 1,     //水平拉伸
-	eCursorVer = 2,     //垂直拉伸
-	eCursorHorVer = 3,  //水平和垂直拉伸
+	eCursorNormal = 0,  //Normal mouse
+	eCursorHor = 1,     //horizontal stretching
+	eCursorVer = 2,     //vertically stretching
+	eCursorHorVer = 3,  //horizontal & vertical stretching
 };
 enum Stuenum{
 	Stu_VPORO = 0, Stu_VKFX = 1, Stu_VKFGX = 2, Stu_VKFY = 3, Stu_VKFGY = 4, Stu_VKFZ = 5, Stu_VKFGZ = 6,
