@@ -8,6 +8,11 @@ A QT-C++ Software with embedded VTK support
 ![VTK](https://img.shields.io/badge/VTK-8.2.0-red.svg)
 ![Qt](https://img.shields.io/badge/Qt-5.12.1-green.svg)
 
+### Architecture
+
+![UGEO](https://vueproject-1253784566.cos.ap-chengdu.myqcloud.com/github/t1.jpg)
+
+
 # Installation
 
 ```
