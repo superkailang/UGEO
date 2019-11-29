@@ -2,7 +2,7 @@
 
 ## High efficient Grid manamerment System
 
-A QT-C++ Software with embedded VTK support
+A QT,C++ Software with embedded VTK support
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![VTK](https://img.shields.io/badge/VTK-8.2.0-red.svg)
@@ -11,10 +11,19 @@ A QT-C++ Software with embedded VTK support
 
 ### Architecture
 
+For detailed source code analysis please read the [souce code Instructions](https://github.com/superkailang/UGEO/blob/master/wiki/souce_code.md) on the wiki.
+
 ![UGEO](https://vueproject-1253784566.cos.ap-chengdu.myqcloud.com/github/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20191129205306.png)
 
 
+
 # Installation
+
+Now we only provide Windows Client package, 
+Support System 
+* Windows
+
+Follow the appropriate instructions below to find installation for your platform 
 
 ```
    For User
