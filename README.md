@@ -8,6 +8,7 @@ A QT-C++ Software with embedded VTK support
 ![VTK](https://img.shields.io/badge/VTK-8.2.0-red.svg)
 ![Qt](https://img.shields.io/badge/Qt-5.12.1-green.svg)
 
+
 ### Architecture
 
 ![UGEO](https://vueproject-1253784566.cos.ap-chengdu.myqcloud.com/github/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20191129205306.png)
@@ -36,8 +37,7 @@ A QT-C++ Software with embedded VTK support
   ```
 
 # Compile 
-    
-    Need to Install Visual Studio, QT in Local Machine
+In order to Building the source, First you Need to Install Visual Studio, QT in Local Machine
     
    ### Conditions
    ##### Install VS2013 + 
@@ -48,7 +48,7 @@ A QT-C++ Software with embedded VTK support
    ##### CMAKE 
          using the CMake gui exe
          CMake UGEO\src\CMakeLists.txt
-   
+		 
 # Contributing
 Any contribution is helpful and awesome! There are basically three forms of how you can contribute to this project and get involved with development:
 
@@ -71,4 +71,4 @@ feel free to write a mail!
 License
 
 Copyright (c) 2018-2019, Kailang All rights reserved.
-  
+ 
