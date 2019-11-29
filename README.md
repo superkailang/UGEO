@@ -10,7 +10,7 @@ A QT-C++ Software with embedded VTK support
 
 ### Architecture
 
-![UGEO](https://vueproject-1253784566.cos.ap-chengdu.myqcloud.com/github/t1.jpg)
+![UGEO](https://vueproject-1253784566.cos.ap-chengdu.myqcloud.com/github/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20191129205306.png)
 
 
 # Installation
