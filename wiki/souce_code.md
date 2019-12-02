@@ -121,4 +121,37 @@ Tree structure is used to store Grid data in different scales,
 we access the tree structure using preorder traversal methods defined in the preOrder function
 
 ### Grid Visiulazation
+In our program, the core library for grid Visualization is VTK library.
+
+The [Visualization Toolkit (VTK)]((https://vtk.org/)) is an open-source, freely available software system for 3D computer graphics, modeling, image processing, volume rendering, scientific visualization, and 2D plotting. It supports a wide variety of visualization algorithms and advanced modeling techniques, and it takes advantage of both threaded and distributed memory parallel processing for speed and scalability, respectively.
+
+##### Overview VTK Visualization
+Grid Plot include cell lines and cell faces
+![](https://raw.githubusercontent.com/lorensen/VTKExamples/master/src/VTKBook/Figures/Figure5-3.png?raw=true)
+
+Example of a hexahedron cell. The topology is implicitly defined by the ordering of the point list.
+
+The polyline is defined by an ordered list of n+1 points, where n is the number of lines in the polyline. Each pair of points (i, i+1) defines a line, such as (8->10) line
+
+
+![vtkCellArray structure to represent cell topology.](https://raw.githubusercontent.com/lorensen/VTKExamples/master/src/VTKBook/Figures/Figure5-12.png?raw=true)
+
+The Visualization Toolkit uses the class vtkCellArray to explicitly represent cell topology. This class is a list of connectivity for each cell.for example a rectange cell is represented by point index (p1,p2,p3,p4)
+
+
+#### CPG grid visulization
+The topology of the corner point grid is represented implicitly by specifying a 3-vector of dimensions(Nx,Ny,Nz), 2-vector of line index (i->j),and cell map.
+
+![](https://vueproject-1253784566.cos.ap-chengdu.myqcloud.com/github/%E7%BB%98%E5%9B%BE1.png)
+
+```postgresql
+	void DrawGrid(vector<FaceNode> FaceNodes, CellRange cellRange, int idx, vtkSmartPointer<vtkActor> CellLineActor, vtkSmartPointer<vtkActor> ZoneActor, vtkSmartPointer<vtkDoubleArray> val, vtkSmartPointer<vtkLookupTable> hueLut){
+		int CellNum = (int)FaceNodes.size();
+		vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New(); // init vtkPoints container
+		AddPoints(FaceNodes, points); 
+		DrawSingleCellLine(FaceNodes, points, CellLineActor);  // Draw Cell line
+		double *Value = GetFaceValue(FaceNodes, idx);
+		DrawGPGGrid(FaceNodes, Value, cellRange.minValue, cellRange.maxValue, ZoneActor, points, val,hueLut); // Draw Cell Face
+	}
+```
 
