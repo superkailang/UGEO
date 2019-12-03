@@ -1,8 +1,8 @@
 # UGEO
 
-## High efficient Grid manamerment System
+## High efficient Grid Management System
 
-A QT,C++ Software with embedded VTK support
+A QT, C++ Software with embedded VTK support
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![VTK](https://img.shields.io/badge/VTK-8.2.0-red.svg)
@@ -46,7 +46,7 @@ Follow the appropriate instructions below to find installation for your platform
   ```
 
 # Compile 
-In order to Building the source, First you Need to Install Visual Studio, QT in Local Machine
+In order to build the source, First you Need to Install Visual Studio, QT in Local Machine
     
    ### Conditions
    ##### Install VS2013 + 
@@ -55,7 +55,7 @@ In order to Building the source, First you Need to Install Visual Studio, QT in 
    ##### compile VTK in local machine
          add VTK path to local machine
    ##### CMAKE 
-         using the CMake gui exe
+         using the CMake GUI exe
          CMake UGEO\src\CMakeLists.txt
 		 
 # Contributing

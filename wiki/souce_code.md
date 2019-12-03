@@ -1,9 +1,9 @@
 ## Source Code Analysis
 #####
 
-All souce codes require a C compiler
+All source codes require a C compiler
 
-UGEO project is well organized, include three main aspects
+UGEO project is well organized, includes three main aspects
 
 * File IO
 * Grid Process
